@@ -152,14 +152,19 @@ public class EavlWpsClient {
         return processDescription;
     }
 
-    public ExecuteResponseAnalyser executeProcess(String url, String processID,
-            ProcessDescriptionType processDescription,
-            HashMap<String, Object> inputs) throws WPSClientException,
+    public ExecuteResponseAnalyser executeProcess(String processID, HashMap<String, Object> inputs) throws WPSClientException,
             IOException {
-        org.n52.wps.client.ExecuteRequestBuilder executeBuilder = new org.n52.wps.client.ExecuteRequestBuilder(
-                processDescription);
 
-        for (InputDescriptionType input : processDescription.getDataInputs()
+        ProcessDescriptionType pd = requestDescribeProcess(processID);
+        if (pd == null) {
+            throw new WPSClientException(
+                    "Algorithm not found on server!"+ processID);
+        }
+
+        org.n52.wps.client.ExecuteRequestBuilder executeBuilder = new org.n52.wps.client.ExecuteRequestBuilder(
+                pd);
+
+        for (InputDescriptionType input : pd.getDataInputs()
                 .getInputArray()) {
             String inputName = input.getIdentifier().getStringValue();
             Object inputValue = inputs.get(inputName);
@@ -197,11 +202,11 @@ public class EavlWpsClient {
         ExecuteDocument execute = executeBuilder.getExecute();
         execute.getExecute().setService("WPS");
         WPSClientSession wpsClient = WPSClientSession.getInstance();
-        Object responseObject = wpsClient.execute(url, execute);
+        Object responseObject = wpsClient.execute(serviceUrl, execute);
         if (responseObject instanceof ExecuteResponseDocument) {
             ExecuteResponseDocument response = (ExecuteResponseDocument) responseObject;
             ExecuteResponseAnalyser analyser = new ExecuteResponseAnalyser(
-                    execute, response, processDescription);
+                    execute, response, pd);
             return analyser;
 
         }

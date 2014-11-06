@@ -6,13 +6,9 @@ package org.auscope.eavl.wpsclient;
 import java.io.*;
 import java.util.*;
 
-import javax.xml.xpath.*;
-
 import net.opengis.wps.x100.*;
 
 import org.n52.wps.client.*;
-import org.n52.wps.io.data.*;
-import org.n52.wps.io.data.binding.complex.*;
 import org.slf4j.*;
 
 /**
@@ -38,18 +34,11 @@ public class ConditionalProbabilityWpsClient extends EavlWpsClient {
         if (data.length == 0 || data[0].length == 0)
             return data;
 
-        ProcessDescriptionType pd = requestDescribeProcess(IMPUTATION_NA_SERVICE_ID);
-        if (pd == null) {
-            throw new WPSClientException(
-                    "imputationNA Algorithm not found on server!");
-        }
-
         HashMap<String, Object> parameters = new HashMap<String, Object>();
         parameters.put("nCols", "" + data[0].length);
         parameters.put("dataStr", toWpsInputString(data));
 
-        ExecuteResponseAnalyser analyser = executeProcess(serviceUrl,
-                IMPUTATION_NA_SERVICE_ID, pd, parameters);
+        ExecuteResponseAnalyser analyser = executeProcess(IMPUTATION_NA_SERVICE_ID, parameters);
 
         return getResult(analyser, "output");
     }
@@ -69,18 +58,10 @@ public class ConditionalProbabilityWpsClient extends EavlWpsClient {
         if (logDensityData.length == 0)
             return new double[0][0];
 
-        ProcessDescriptionType pd = requestDescribeProcess(LOG_DENSITY_SERVICE_ID);
-        if (pd == null) {
-            throw new WPSClientException(
-                    "imputationNA Algorithm not found on server!");
-        }
-
         HashMap<String, Object> parameters = new HashMap<String, Object>();
-
         parameters.put("data", toWpsInputString(logDensityData));
 
-        ExecuteResponseAnalyser analyser = executeProcess(serviceUrl,
-                LOG_DENSITY_SERVICE_ID, pd, parameters);
+        ExecuteResponseAnalyser analyser = executeProcess(LOG_DENSITY_SERVICE_ID, parameters);
 
         return getResult(analyser, "output");
     }
