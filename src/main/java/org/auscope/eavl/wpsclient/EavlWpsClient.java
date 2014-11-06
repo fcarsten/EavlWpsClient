@@ -54,10 +54,35 @@ public class EavlWpsClient {
             return "";
 
         StringBuffer res = new StringBuffer("");
-        for (double[] col : data) {
-            for (double d : col) {
+        for (double[] row : data) {
+            for (double d : row) {
                 res.append(',');
                 res.append(d);
+            }
+        }
+        return res.substring(1);// Correct for first ','
+    }
+
+    /**
+     * @param data
+     * @return
+     */
+    public static String toWpsInputString(Object[][] data) {
+        if (data == null || data.length == 0 || data[0].length == 0)
+            return "";
+
+        int colNumExpectation = data[0].length;
+
+        StringBuffer res = new StringBuffer("");
+        for (Object[] row : data) {
+            if (row.length != colNumExpectation) {
+                throw new IllegalArgumentException(
+                        "Found rows with different number of columns: "
+                                + colNumExpectation + " and " + row.length);
+            }
+            for (Object d : row) {
+                res.append(',');
+                res.append(d == null ? "NA" : d.toString());
             }
         }
         return res.substring(1);// Correct for first ','
@@ -71,12 +96,11 @@ public class EavlWpsClient {
         double[][] result = null;
 
         String[] rows = resultStr.split("[\n\r]+");
+        result = new double[rows.length][];
         int r = 0;
         for (String row : rows) {
             String[] vals = row.split(",");
-            if (result == null) {
-                result = new double[rows.length][vals.length];
-            }
+            result[r] = new double[vals.length];
             int c = 0;
             for (String val : vals) {
                 result[r][c] = Double.parseDouble(val.trim());
@@ -152,20 +176,20 @@ public class EavlWpsClient {
         return processDescription;
     }
 
-    public ExecuteResponseAnalyser executeProcess(String processID, HashMap<String, Object> inputs) throws WPSClientException,
+    public ExecuteResponseAnalyser executeProcess(String processID,
+            HashMap<String, Object> inputs) throws WPSClientException,
             IOException {
 
         ProcessDescriptionType pd = requestDescribeProcess(processID);
         if (pd == null) {
-            throw new WPSClientException(
-                    "Algorithm not found on server!"+ processID);
+            throw new WPSClientException("Algorithm not found on server!"
+                    + processID);
         }
 
         org.n52.wps.client.ExecuteRequestBuilder executeBuilder = new org.n52.wps.client.ExecuteRequestBuilder(
                 pd);
 
-        for (InputDescriptionType input : pd.getDataInputs()
-                .getInputArray()) {
+        for (InputDescriptionType input : pd.getDataInputs().getInputArray()) {
             String inputName = input.getIdentifier().getStringValue();
             Object inputValue = inputs.get(inputName);
             if (input.getLiteralData() != null) {

@@ -6,8 +6,6 @@ package org.auscope.eavl.wpsclient;
 import java.io.*;
 import java.util.*;
 
-import net.opengis.wps.x100.*;
-
 import org.n52.wps.client.*;
 import org.slf4j.*;
 
@@ -28,6 +26,7 @@ public class ConditionalProbabilityWpsClient extends EavlWpsClient {
 
     public final static String IMPUTATION_NA_SERVICE_ID = "org.n52.wps.server.r.impna2";
     public final static String LOG_DENSITY_SERVICE_ID = "org.n52.wps.server.r.logDensity";
+    public final static String MEAN_ACF_SERVICE_ID = "org.n52.wps.server.r.meanACF";
 
     public double[][] imputationNA(double[][] data) throws WPSClientException,
             IOException {
@@ -45,23 +44,45 @@ public class ConditionalProbabilityWpsClient extends EavlWpsClient {
 
 
     /**
-     * @param logDensityData
+     * @param data
      *            String of Comma separated values
      * @return
      * @throws WPSClientException
      * @throws IOException
      */
-    public double[][] logDensity(double[] logDensityData)
+    public double[][] logDensity(double[] data)
             throws WPSClientException, IOException {
-        if (logDensityData == null)
+        if (data == null)
             return null;
-        if (logDensityData.length == 0)
+        if (data.length == 0)
             return new double[0][0];
 
         HashMap<String, Object> parameters = new HashMap<String, Object>();
-        parameters.put("data", toWpsInputString(logDensityData));
+        parameters.put("data", toWpsInputString(data));
 
         ExecuteResponseAnalyser analyser = executeProcess(LOG_DENSITY_SERVICE_ID, parameters);
+
+        return getResult(analyser, "output");
+    }
+
+
+    /**
+     * @param meanAcfData
+     * @return
+     * @throws IOException
+     * @throws WPSClientException
+     */
+    public double[][] meanACF(Object[][] data) throws WPSClientException, IOException {
+        if (data == null)
+            return null;
+        if (data.length == 0)
+            return new double[0][0];
+
+        HashMap<String, Object> parameters = new HashMap<String, Object>();
+        String dataStr = toWpsInputString(data);
+        parameters.put("dataStr", dataStr);
+        System.out.println(dataStr);
+        ExecuteResponseAnalyser analyser = executeProcess(MEAN_ACF_SERVICE_ID, parameters);
 
         return getResult(analyser, "output");
     }
