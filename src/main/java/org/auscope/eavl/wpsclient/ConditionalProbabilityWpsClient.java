@@ -72,11 +72,13 @@ public class ConditionalProbabilityWpsClient extends EavlWpsClient {
      * @throws IOException
      * @throws WPSClientException
      */
-    public double[][] meanACF(Object[][] data) throws WPSClientException, IOException {
+    public ACF meanACF(Object[][] data) throws WPSClientException, IOException {
         if (data == null)
             return null;
+        double ci = Double.NaN;
+        double[] acf= new double[0];
         if (data.length == 0)
-            return new double[0][0];
+            return new ACF(acf, ci);
 
         HashMap<String, Object> parameters = new HashMap<String, Object>();
         String dataStr = toWpsInputString(data);
@@ -84,7 +86,16 @@ public class ConditionalProbabilityWpsClient extends EavlWpsClient {
         System.out.println(dataStr);
         ExecuteResponseAnalyser analyser = executeProcess(MEAN_ACF_SERVICE_ID, parameters);
 
-        return getResult(analyser, "output");
+        double[][] res = getResult(analyser, "output");
+
+        if(res.length>0 && res[0].length>0) {
+            ci = res[0][1];
+            acf = new double[res.length];
+            for(int i=0; i< res.length; i++) {
+                acf[i]=res[i][0];
+            }
+        }
+        return new ACF(acf, ci);
     }
 
 
