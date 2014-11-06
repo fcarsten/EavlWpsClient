@@ -57,13 +57,6 @@ public class EavlWpsClient {
 
         ProcessDescriptionType processDescription = wpsClient
                 .getProcessDescription(serviceUrl, processID);
-
-        // InputDescriptionType[] inputList = processDescription.getDataInputs()
-        // .getInputArray();
-        //
-        // for (InputDescriptionType input : inputList) {
-        // logger.debug(input.getIdentifier().getStringValue());
-        // }
         return processDescription;
     }
 
@@ -99,15 +92,6 @@ public class EavlWpsClient {
                                                                     .getBytes(StandardCharsets.UTF_8)),
                                                     "text/plain")), null,
                                     "base64", "text/plain");
-
-                    // executeBuilder
-                    // .addComplexData(inputName, new
-                    // PlainStringBinding((String) inputValue), null, "UTF-8",
-                    // "text/plain");
-                    // XmlStringImpl value = new XmlStringImpl();
-                    // value.setStringValue("<![CDATA[" + inputValue + "]]>");
-                    // executeBuilder.addComplexData(inputName, value, null,
-                    // "UTF-8", "text/plain");
                 }
 
                 if (inputValue == null && input.getMinOccurs().intValue() > 0) {
@@ -116,31 +100,6 @@ public class EavlWpsClient {
                 }
             }
         }
-
-        // String parameterOut = "outputStr";
-        // executeBuilder.setResponseDocument(parameterOut, null, "UTF-8",
-        // "text/plain");
-        //
-        // executeBuilder.setMimeTypeForOutput("text/plain", "output");
-        // executeBuilder.setEncodingForOutput("UTF-8", "output");
-        // // executeBuilder.setSchemaForOutput(
-        // // "http://schemas.opengis.net/wcps/1.0/wcpsAll.xsd", "output");
-        //
-        // executeBuilder.setMimeTypeForOutput("text/plain", "sessionInfo");
-        // executeBuilder.setEncodingForOutput("UTF-8", "sessionInfo");
-        // executeBuilder.setSchemaForOutput(
-        // "http://schemas.opengis.net/wcps/1.0/wcpsAll.xsd",
-        // "sessionInfo");
-        //
-        // executeBuilder.setMimeTypeForOutput("text/plain", "warnings");
-        // executeBuilder.setEncodingForOutput("UTF-8", "warnings");
-        // executeBuilder.setSchemaForOutput(
-        // "http://schemas.opengis.net/wcps/1.0/wcpsAll.xsd", "warnings");
-
-        // executeBuilder.setMimeTypeForOutput("text/xml", "result");
-        // executeBuilder.setSchemaForOutput(
-        // "http://schemas.opengis.net/gml/3.1.1/base/feature.xsd",
-        // "result");
 
         ExecuteDocument execute = executeBuilder.getExecute();
         execute.getExecute().setService("WPS");
@@ -153,14 +112,6 @@ public class EavlWpsClient {
             return analyser;
 
         }
-        // ExecuteResponseDocument responseDoc = (ExecuteResponseDocument)
-        // responseObject;
-        // XObject data = XPathAPI.eval(responseDoc.getDomNode(),
-        // "//wps:LiteralData");
-        // String output = data.toString();
-        // System.out.println("Received:\n"+output);
-        // return null;
-
         throw new WPSClientException("Exception: " + responseObject.toString());
     }
 
