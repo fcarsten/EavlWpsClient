@@ -46,12 +46,21 @@ public class App {
             172.5, 180, 182.5, 173, 114.4, 65.5, 89, 113.5, 132.9, 533.3, 981,
             1077.5, 1058.5, 1098.5 };
 
+    final static Object[][] MEAN_ACF_DATA = { { "UGD1944", 65.34 },
+            { "UGD1944", 59.795 }, { "UGD1944", 47.02 }, { "UGD1944", 52.34 },
+
+            { "UGD1941R", 54.74 }, { "UGD1941R", 40.085 }, { "UGD1941R", 40.112 },
+            { "UGD1941R", 78.504 }, { "UGD1941R", 54.905 }, { "UGD1941R", 53.14 },
+            { "UGD1941R", 66.03 }, { "UGD1941R", 63.797 }, { "UGD1941R", 39.194 },
+            { "UGD1941R", 34.836 }, { "UGD1941R", 41.4 }, { "UGD1941R", 38.425 },
+            { "UGD1941R", 51.38 }, { "UGD1941R", 68.49 } };
+
     public static void print2DArray(double[][] array) {
         for (double[] ds : array) {
-            boolean first=true;
+            boolean first = true;
             for (double d : ds) {
-                System.out.print( (first?"":",") + d);
-                first=false;
+                System.out.print((first ? "" : ",") + d);
+                first = false;
             }
             System.out.println("");
         }
@@ -61,10 +70,12 @@ public class App {
         ConditionalProbabilityWpsClient client = new ConditionalProbabilityWpsClient(
                 "http://130.56.250.15:8080/wps/WebProcessingService");
         try {
-            double[][] res = client.imputationNA(IMPUTATION_NA_DATA);
-            print2DArray(res);
-            res = client.logDensity(LOG_DENSITY_DATA);
-            print2DArray(res);
+//            double[][] res = client.imputationNA(IMPUTATION_NA_DATA);
+//            print2DArray(res);
+//            res = client.logDensity(LOG_DENSITY_DATA);
+//            print2DArray(res);
+            double[][] resMeanACF = client.meanACF(MEAN_ACF_DATA);
+            print2DArray(resMeanACF);
         } catch (WPSClientException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
