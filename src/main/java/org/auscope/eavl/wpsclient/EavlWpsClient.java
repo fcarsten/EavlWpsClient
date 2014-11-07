@@ -120,7 +120,7 @@ public class EavlWpsClient {
      * @throws WPSClientException
      * @throws FileNotFoundException
      */
-    public static double[][] getResult(ExecuteResponseAnalyser analyser,
+    public static String getResultString(ExecuteResponseAnalyser analyser,
             String outputParameterName) throws WPSClientException,
             FileNotFoundException {
         GenericFileDataBinding data = (GenericFileDataBinding) analyser
@@ -133,9 +133,8 @@ public class EavlWpsClient {
         XPath xpath = factory.newXPath();
         try {
             XPathExpression expression = xpath.compile("/xml-fragment");
-            String resultStr = expression.evaluate(new org.xml.sax.InputSource(
+            return expression.evaluate(new org.xml.sax.InputSource(
                     new FileInputStream(f)));
-            return parseWpsMatrixOutput(resultStr);
         } catch (XPathExpressionException e) {
             throw new WPSClientException("Error parsing result: "
                     + e.getMessage(), e);
@@ -144,6 +143,20 @@ public class EavlWpsClient {
                 logger.warn("Could not delete temporary result file: " + f);
             }
         }
+    }
+
+    /**
+     * @param analyser
+     * @param outputParameterName
+     * @return
+     * @throws WPSClientException
+     * @throws FileNotFoundException
+     */
+    public static double[][] getResult(ExecuteResponseAnalyser analyser,
+            String outputParameterName) throws WPSClientException,
+            FileNotFoundException {
+        String resultStr = getResultString(analyser, outputParameterName);
+        return parseWpsMatrixOutput(resultStr);
     }
 
     /**

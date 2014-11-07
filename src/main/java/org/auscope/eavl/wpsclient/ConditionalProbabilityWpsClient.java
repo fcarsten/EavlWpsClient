@@ -37,11 +37,11 @@ public class ConditionalProbabilityWpsClient extends EavlWpsClient {
         parameters.put("nCols", "" + data[0].length);
         parameters.put("dataStr", toWpsInputString(data));
 
-        ExecuteResponseAnalyser analyser = executeProcess(IMPUTATION_NA_SERVICE_ID, parameters);
+        ExecuteResponseAnalyser analyser = executeProcess(
+                IMPUTATION_NA_SERVICE_ID, parameters);
 
         return getResult(analyser, "output");
     }
-
 
     /**
      * @param data
@@ -50,8 +50,8 @@ public class ConditionalProbabilityWpsClient extends EavlWpsClient {
      * @throws WPSClientException
      * @throws IOException
      */
-    public double[][] logDensity(double[] data)
-            throws WPSClientException, IOException {
+    public double[][] logDensity(double[] data) throws WPSClientException,
+            IOException {
         if (data == null)
             return null;
         if (data.length == 0)
@@ -60,11 +60,11 @@ public class ConditionalProbabilityWpsClient extends EavlWpsClient {
         HashMap<String, Object> parameters = new HashMap<String, Object>();
         parameters.put("data", toWpsInputString(data));
 
-        ExecuteResponseAnalyser analyser = executeProcess(LOG_DENSITY_SERVICE_ID, parameters);
+        ExecuteResponseAnalyser analyser = executeProcess(
+                LOG_DENSITY_SERVICE_ID, parameters);
 
         return getResult(analyser, "output");
     }
-
 
     /**
      * @param meanAcfData
@@ -76,28 +76,27 @@ public class ConditionalProbabilityWpsClient extends EavlWpsClient {
         if (data == null)
             return null;
         double ci = Double.NaN;
-        double[] acf= new double[0];
-        if (data.length == 0)
-            return new ACF(acf, ci);
+        double[] acf = new double[0];
+        if (data.length > 0) {
+            HashMap<String, Object> parameters = new HashMap<String, Object>();
+            String dataStr = toWpsInputString(data);
+            parameters.put("dataStr", dataStr);
+            ExecuteResponseAnalyser analyser = executeProcess(
+                    MEAN_ACF_SERVICE_ID, parameters);
 
-        HashMap<String, Object> parameters = new HashMap<String, Object>();
-        String dataStr = toWpsInputString(data);
-        parameters.put("dataStr", dataStr);
-        System.out.println(dataStr);
-        ExecuteResponseAnalyser analyser = executeProcess(MEAN_ACF_SERVICE_ID, parameters);
+            double[][] res = getResult(analyser, "output");
 
-        double[][] res = getResult(analyser, "output");
-
-        if(res.length>0 && res[0].length>0) {
-            ci = res[0][1];
-            acf = new double[res.length];
-            for(int i=0; i< res.length; i++) {
-                acf[i]=res[i][0];
+            if (res.length > 0 && res[0].length > 0) {
+                ci = res[0][1];
+                acf = new double[res.length];
+                for (int i = 0; i < res.length; i++) {
+                    acf[i] = res[i][0];
+                }
+            } else {
+                throw new WPSClientException("Invalid server response for meanACF: "+ getResultString(analyser, "output"));
             }
         }
         return new ACF(acf, ci);
     }
-
-
 
 }
