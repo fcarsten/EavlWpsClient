@@ -3,18 +3,32 @@
  */
 package org.auscope.eavl.wpsclient;
 
-import java.io.*;
-import java.nio.charset.*;
-import java.util.*;
+import java.io.ByteArrayInputStream;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.nio.charset.StandardCharsets;
+import java.util.HashMap;
 
-import javax.xml.xpath.*;
+import javax.xml.xpath.XPath;
+import javax.xml.xpath.XPathExpression;
+import javax.xml.xpath.XPathExpressionException;
+import javax.xml.xpath.XPathFactory;
 
-import net.opengis.wps.x100.*;
+import net.opengis.wps.x100.CapabilitiesDocument;
+import net.opengis.wps.x100.ExecuteDocument;
+import net.opengis.wps.x100.ExecuteResponseDocument;
+import net.opengis.wps.x100.InputDescriptionType;
+import net.opengis.wps.x100.ProcessDescriptionType;
 
-import org.n52.wps.client.*;
-import org.n52.wps.io.data.*;
-import org.n52.wps.io.data.binding.complex.*;
-import org.slf4j.*;
+import org.n52.wps.client.ExecuteResponseAnalyser;
+import org.n52.wps.client.WPSClientException;
+import org.n52.wps.client.WPSClientSession;
+import org.n52.wps.io.data.GenericFileData;
+import org.n52.wps.io.data.binding.complex.GenericFileDataBinding;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * @author fri096
@@ -46,6 +60,19 @@ public class EavlWpsClient {
     }
 
     /**
+     * @param data Array of values (nulls encoded as Double.NaN)
+     * @return
+     */
+    public static String toWpsInputString(Double[] data) {
+        StringBuffer dataStr = new StringBuffer("");
+        for (Double d : data) {
+            dataStr.append(',');
+            dataStr.append(d == null ? Double.NaN : d);
+        }
+        return dataStr.substring(1);
+    }
+
+    /**
      * @param data
      * @return
      */
@@ -58,6 +85,24 @@ public class EavlWpsClient {
             for (double d : row) {
                 res.append(',');
                 res.append(d);
+            }
+        }
+        return res.substring(1);// Correct for first ','
+    }
+
+    /**
+     * @param data
+     * @return
+     */
+    public static String toWpsInputString(Double[][] data) {
+        if (data == null || data.length == 0 || data[0].length == 0)
+            return "";
+
+        StringBuffer res = new StringBuffer("");
+        for (Double[] row : data) {
+            for (Double d : row) {
+                res.append(',');
+                res.append(d == null ? Double.NaN : d);
             }
         }
         return res.substring(1);// Correct for first ','

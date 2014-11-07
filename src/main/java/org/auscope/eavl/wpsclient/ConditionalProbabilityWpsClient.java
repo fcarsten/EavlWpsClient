@@ -3,11 +3,13 @@
  */
 package org.auscope.eavl.wpsclient;
 
-import java.io.*;
-import java.util.*;
+import java.io.IOException;
+import java.util.HashMap;
 
-import org.n52.wps.client.*;
-import org.slf4j.*;
+import org.n52.wps.client.ExecuteResponseAnalyser;
+import org.n52.wps.client.WPSClientException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * @author fri096
@@ -42,7 +44,6 @@ public class ConditionalProbabilityWpsClient extends EavlWpsClient {
         return getResult(analyser, "output");
     }
 
-
     /**
      * @param data
      *            String of Comma separated values
@@ -57,8 +58,37 @@ public class ConditionalProbabilityWpsClient extends EavlWpsClient {
         if (data.length == 0)
             return new double[0][0];
 
+        return logDensity(toWpsInputString(data));
+    }
+
+    /**
+     * @param data
+     *            Array of values (nulls encoded as Double.NaN)
+     * @return
+     * @throws WPSClientException
+     * @throws IOException
+     */
+    public double[][] logDensity(Double[] data)
+            throws WPSClientException, IOException {
+        if (data == null)
+            return null;
+        if (data.length == 0)
+            return new double[0][0];
+
+        return logDensity(toWpsInputString(data));
+    }
+
+    /**
+     * @param data
+     *            String of Comma separated values
+     * @return
+     * @throws WPSClientException
+     * @throws IOException
+     */
+    protected double[][] logDensity(String data)
+            throws WPSClientException, IOException {
         HashMap<String, Object> parameters = new HashMap<String, Object>();
-        parameters.put("data", toWpsInputString(data));
+        parameters.put("data", data);
 
         ExecuteResponseAnalyser analyser = executeProcess(LOG_DENSITY_SERVICE_ID, parameters);
 
