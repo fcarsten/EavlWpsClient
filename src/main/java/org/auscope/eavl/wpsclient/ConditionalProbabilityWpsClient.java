@@ -28,6 +28,7 @@ public class ConditionalProbabilityWpsClient extends EavlWpsClient {
 
     public final static String IMPUTATION_NA_SERVICE_ID = "org.n52.wps.server.r.impna2";
     public final static String LOG_DENSITY_SERVICE_ID = "org.n52.wps.server.r.logDensity";
+    public final static String DOUBLE_LOG_DENSITY_SERVICE_ID = "org.n52.wps.server.r.doubleLogDensity";
     public final static String MEAN_ACF_SERVICE_ID = "org.n52.wps.server.r.meanACF";
 
     public double[][] imputationNA(double[][] data) throws WPSClientException,
@@ -69,8 +70,8 @@ public class ConditionalProbabilityWpsClient extends EavlWpsClient {
      * @throws WPSClientException
      * @throws IOException
      */
-    public double[][] logDensity(Double[] data)
-            throws WPSClientException, IOException {
+    public double[][] logDensity(Double[] data) throws WPSClientException,
+            IOException {
         if (data == null)
             return null;
         if (data.length == 0)
@@ -86,8 +87,8 @@ public class ConditionalProbabilityWpsClient extends EavlWpsClient {
      * @throws WPSClientException
      * @throws IOException
      */
-    protected double[][] logDensity(String data)
-            throws WPSClientException, IOException {
+    protected double[][] logDensity(String data) throws WPSClientException,
+            IOException {
         HashMap<String, Object> parameters = new HashMap<String, Object>();
         parameters.put("data", data);
 
@@ -124,10 +125,63 @@ public class ConditionalProbabilityWpsClient extends EavlWpsClient {
                     acf[i] = res[i][0];
                 }
             } else {
-                throw new WPSClientException("Invalid server response for meanACF: "+ getResultString(analyser, "output"));
+                throw new WPSClientException(
+                        "Invalid server response for meanACF: "
+                                + getResultString(analyser, "output"));
             }
         }
         return new ACF(acf, ci);
+    }
+
+    /**
+     * @param data
+     * @param v
+     *            threshold
+     * @return
+     * @throws IOException
+     * @throws WPSClientException
+     */
+    public double[][] doubleLogDensity(double[][] data, double v) throws WPSClientException, IOException {
+        if (data == null)
+            return null;
+        if (data.length == 0 || data[0].length==0)
+            return new double[0][0];
+
+        return doubleLogDensity(toWpsInputString(data), v);
+    }
+
+    /**
+     * @param data
+     * @param v
+     *            threshold
+     * @return
+     * @throws IOException
+     * @throws WPSClientException
+     */
+    public double[][] doubleLogDensity(Double[][] data, double v) throws WPSClientException, IOException {
+        if (data == null)
+            return null;
+        if (data.length == 0 || data[0].length==0)
+            return new double[0][0];
+
+        return doubleLogDensity(toWpsInputString(data), v);
+    }
+
+    /**
+     * @param wpsInputString
+     * @return
+     * @throws IOException
+     * @throws WPSClientException
+     */
+    private double[][] doubleLogDensity(String dataStr, double v) throws WPSClientException, IOException {
+        HashMap<String, Object> parameters = new HashMap<String, Object>();
+        parameters.put("dataStr", dataStr);
+        parameters.put("v", v);
+
+        ExecuteResponseAnalyser analyser = executeProcess(
+                DOUBLE_LOG_DENSITY_SERVICE_ID, parameters);
+
+        return getResult(analyser, "output");
     }
 
 }
