@@ -54,20 +54,29 @@ public class EavlWpsClient {
         StringBuffer dataStr = new StringBuffer("");
         for (double d : data) {
             dataStr.append(',');
-            dataStr.append(d);
+            if (Double.isFinite(d)) {
+                dataStr.append(d);
+            } else {
+                dataStr.append("NA");
+            }
         }
         return dataStr.substring(1);
     }
 
     /**
-     * @param data Array of values (nulls encoded as Double.NaN)
+     * @param data
+     *            Array of values (nulls encoded as Double.NaN)
      * @return
      */
     public static String toWpsInputString(Double[] data) {
         StringBuffer dataStr = new StringBuffer("");
         for (Double d : data) {
             dataStr.append(',');
-            dataStr.append(d == null ? Double.NaN : d);
+            if(d!=null && Double.isFinite(d)) {
+                dataStr.append(d);
+            } else {
+                dataStr.append("NA");
+            }
         }
         return dataStr.substring(1);
     }
@@ -148,7 +157,11 @@ public class EavlWpsClient {
             result[r] = new double[vals.length];
             int c = 0;
             for (String val : vals) {
-                result[r][c] = Double.parseDouble(val.trim());
+                if(val.equals("NA")) {
+                    result[r][c] = Double.NaN;
+                } else {
+                    result[r][c] = Double.parseDouble(val.trim());
+                }
                 c++;
             }
             c = 0;
@@ -254,6 +267,12 @@ public class EavlWpsClient {
                 if (inputValue instanceof String) {
                     executeBuilder.addLiteralData(inputName,
                             (String) inputValue);
+                } else if(inputValue instanceof Number) {
+                    executeBuilder.addLiteralData(inputName,
+                             ((Number) inputValue).toString());
+
+                } else {
+                    throw new IllegalArgumentException("Parameter "+inputName+" of unknown type: "+inputValue.getClass().getName());
                 }
             } else if (input.getComplexData() != null) {
 
