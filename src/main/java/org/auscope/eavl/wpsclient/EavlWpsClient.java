@@ -72,7 +72,7 @@ public class EavlWpsClient {
         StringBuffer dataStr = new StringBuffer("");
         for (Double d : data) {
             dataStr.append(',');
-            if(d!=null && Double.isFinite(d)) {
+            if (d != null && Double.isFinite(d)) {
                 dataStr.append(d);
             } else {
                 dataStr.append("NA");
@@ -157,7 +157,7 @@ public class EavlWpsClient {
             result[r] = new double[vals.length];
             int c = 0;
             for (String val : vals) {
-                if(val.equals("NA")) {
+                if (val.equals("NA")) {
                     result[r][c] = Double.NaN;
                 } else {
                     result[r][c] = Double.parseDouble(val.trim());
@@ -168,6 +168,23 @@ public class EavlWpsClient {
             r++;
         }
 
+        return result;
+    }
+
+    public static double[] parseWpsVectorOutput(String resultStr) {
+        double[] result = null;
+
+        String[] vals = resultStr.split(",");
+        result = new double[vals.length];
+        int c = 0;
+        for (String val : vals) {
+            if (val.equals("NA")) {
+                result[c] = Double.NaN;
+            } else {
+                result[c] = Double.parseDouble(val.trim());
+            }
+            c++;
+        }
         return result;
     }
 
@@ -215,6 +232,13 @@ public class EavlWpsClient {
             FileNotFoundException {
         String resultStr = getResultString(analyser, outputParameterName);
         return parseWpsMatrixOutput(resultStr);
+    }
+
+    public static double[] getVectorResult(ExecuteResponseAnalyser analyser,
+            String outputParameterName) throws WPSClientException,
+            FileNotFoundException {
+        String resultStr = getResultString(analyser, outputParameterName);
+        return parseWpsVectorOutput(resultStr);
     }
 
     /**
@@ -267,12 +291,19 @@ public class EavlWpsClient {
                 if (inputValue instanceof String) {
                     executeBuilder.addLiteralData(inputName,
                             (String) inputValue);
-                } else if(inputValue instanceof Number) {
+                } else if (inputValue instanceof Number) {
                     executeBuilder.addLiteralData(inputName,
-                             ((Number) inputValue).toString());
+                            ((Number) inputValue).toString());
 
                 } else {
-                    throw new IllegalArgumentException("Parameter "+inputName+" of unknown type: "+inputValue.getClass().getName());
+                    if (inputValue == null) {
+                        throw new IllegalArgumentException("Missing Input Parameter "
+                                + inputName);
+                    } else {
+                        throw new IllegalArgumentException("Input Parameter "
+                                + inputName + " of unknown type: "
+                                + inputValue.getClass().getName());
+                    }
                 }
             } else if (input.getComplexData() != null) {
 
