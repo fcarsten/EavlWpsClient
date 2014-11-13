@@ -54,7 +54,7 @@ public class EavlWpsClient {
         StringBuffer dataStr = new StringBuffer("");
         for (double d : data) {
             dataStr.append(',');
-            if (!Double.isInfinite(d)) {
+            if (! (Double.isNaN(d) || Double.isInfinite(d))) {
                 dataStr.append(d);
             } else {
                 dataStr.append("NA");
@@ -72,7 +72,7 @@ public class EavlWpsClient {
         StringBuffer dataStr = new StringBuffer("");
         for (Double d : data) {
             dataStr.append(',');
-            if (d != null && !Double.isInfinite(d)) {
+            if (d != null && ! (Double.isNaN(d) ||  Double.isInfinite(d))) {
                 dataStr.append(d);
             } else {
                 dataStr.append("NA");
