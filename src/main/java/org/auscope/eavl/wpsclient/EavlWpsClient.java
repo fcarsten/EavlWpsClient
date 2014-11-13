@@ -54,13 +54,26 @@ public class EavlWpsClient {
         StringBuffer dataStr = new StringBuffer("");
         for (double d : data) {
             dataStr.append(',');
-            if (! (Double.isNaN(d) || Double.isInfinite(d))) {
-                dataStr.append(d);
-            } else {
-                dataStr.append("NA");
-            }
+            dataStr.append(toRString(d));
         }
         return dataStr.substring(1);
+    }
+
+    public static String toRString(Object o) {
+        if(o==null) return "NA";
+        String res = o.toString();
+
+        if(res==null || "nan".equalsIgnoreCase(res)) {
+            return "NA";
+        }
+
+        if("Infinity".equalsIgnoreCase(res))
+            return "Inf";
+
+        if("-Infinity".equalsIgnoreCase(res))
+            return "-Inf";
+
+        return res;
     }
 
     /**
@@ -72,11 +85,7 @@ public class EavlWpsClient {
         StringBuffer dataStr = new StringBuffer("");
         for (Double d : data) {
             dataStr.append(',');
-            if (d != null && ! (Double.isNaN(d) ||  Double.isInfinite(d))) {
-                dataStr.append(d);
-            } else {
-                dataStr.append("NA");
-            }
+            dataStr.append(toRString(d));
         }
         return dataStr.substring(1);
     }
@@ -93,7 +102,7 @@ public class EavlWpsClient {
         for (double[] row : data) {
             for (double d : row) {
                 res.append(',');
-                res.append(d);
+                res.append(toRString(d));
             }
         }
         return res.substring(1);// Correct for first ','
@@ -111,7 +120,7 @@ public class EavlWpsClient {
         for (Double[] row : data) {
             for (Double d : row) {
                 res.append(',');
-                res.append(d == null ? Double.NaN : d);
+                res.append(toRString(d));
             }
         }
         return res.substring(1);// Correct for first ','
@@ -136,7 +145,7 @@ public class EavlWpsClient {
             }
             for (Object d : row) {
                 res.append(',');
-                res.append(d == null ? "NA" : d.toString());
+                res.append(toRString(d));
             }
         }
         return res.substring(1);// Correct for first ','
