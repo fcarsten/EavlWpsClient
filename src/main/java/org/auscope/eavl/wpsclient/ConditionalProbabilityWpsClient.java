@@ -37,9 +37,23 @@ public class ConditionalProbabilityWpsClient extends EavlWpsClient {
         if (data.length == 0 || data[0].length == 0)
             return data;
 
+        return imputationNA(data[0].length, toWpsInputString(data));
+    }
+
+    public double[][] imputationNA(Double[][] data) throws WPSClientException,
+            IOException {
+        if (data.length == 0 || data[0].length == 0)
+            return new double[][] {};
+
+        return imputationNA(data[0].length, toWpsInputString(data));
+    }
+
+    public double[][] imputationNA(int nCols, String dataStr) throws WPSClientException,
+            IOException {
+
         HashMap<String, Object> parameters = new HashMap<String, Object>();
-        parameters.put("nCols", "" + data[0].length);
-        parameters.put("dataStr", toWpsInputString(data));
+        parameters.put("nCols", "" + nCols);
+        parameters.put("dataStr", dataStr);
 
         ExecuteResponseAnalyser analyser = executeProcess(
                 IMPUTATION_NA_SERVICE_ID, parameters);
