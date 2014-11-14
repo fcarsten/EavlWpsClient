@@ -2,7 +2,7 @@
 # wps.in: dataStr, string, DATA seperated by comma in one line;
 # wps.in: v, string, threshold value for the predictor;
 # wps.off;
-dataStr=paste("0.007,0.0095,0.02,0.0495,0.041,0.00675,0.00825,0.00825,0.0025,0.00775,0.1855,1.0855,0.959,0.2455,",
+dataStr=paste("0.007,0.0095,0.02,NA,0.041,0.00675,0.00825,0.00825,0.0025,0.00775,0.1855,1.0855,0.959,0.2455,",
            "0.212,0.032,0.0275,0.052,0.0615,0.372,1.164,0.8795,0.113,0.073,0.0275,0.00525,0.0025,0.00375,0.00375,",
            "0.0115,0.00825,0.13425,0.13425,0.00375,0.00375,0.01575,0.019,0.0615,38.7818,118.5957,0.028,0.1765,",
            "0.2335,0.098,0.032,0.00475,0.00375,0.00375,0.00825,0.00825,0.01875,0.0505,1.2594,1.1304,1.4036,",
@@ -15,10 +15,10 @@ v = "0.2,0.4,0.8"
 
 #1. IMPORT
 # compdata=read.csv(datafile)
-data=read.table(header=F, sep=",", text=dataStr )
+data=read.table(header=F, sep=",", text=dataStr, na.strings=c("","NaN","NA") )
 q=read.table(header=F, sep=",", text=v)
 
-res= quantile(data, t(q))
+res= quantile(data, t(q), na.rm=T)
 
 output = "quantileout"
 write.table(res, output,col.names=F, row.names=F, sep=",")
