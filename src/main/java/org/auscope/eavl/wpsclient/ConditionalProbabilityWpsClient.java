@@ -27,6 +27,7 @@ public class ConditionalProbabilityWpsClient extends EavlWpsClient {
     }
 
     public final static String IMPUTATION_NA_SERVICE_ID = "org.n52.wps.server.r.impna2";
+    public final static String CEN_LA_SERVICE_ID = "org.n52.wps.server.r.cenlr";
     public final static String LOG_DENSITY_SERVICE_ID = "org.n52.wps.server.r.logDensity";
     public final static String DOUBLE_LOG_DENSITY_SERVICE_ID = "org.n52.wps.server.r.doubleLogDensity";
     public final static String MEAN_ACF_SERVICE_ID = "org.n52.wps.server.r.meanACF";
@@ -220,6 +221,37 @@ public class ConditionalProbabilityWpsClient extends EavlWpsClient {
 
         ExecuteResponseAnalyser analyser = executeProcess(
                 DOUBLE_LOG_DENSITY_SERVICE_ID, parameters);
+
+        return getResult(analyser, "output");
+    }
+
+    /**
+     * @param cenLeData
+     * @return
+     * @throws IOException
+     * @throws WPSClientException
+     */
+    public double[][] cenLR(double[][] data) throws WPSClientException, IOException {
+        if (data.length == 0 || data[0].length == 0)
+            return data;
+
+        return cenLR(data[0].length, toWpsInputString(data));
+    }
+
+    /**
+     * @param length
+     * @param wpsInputString
+     * @return
+     * @throws IOException
+     * @throws WPSClientException
+     */
+    private double[][] cenLR(int nCols, String dataStr) throws WPSClientException, IOException {
+        HashMap<String, Object> parameters = new HashMap<String, Object>();
+        parameters.put("nCols", "" + nCols);
+        parameters.put("dataStr", dataStr);
+
+        ExecuteResponseAnalyser analyser = executeProcess(
+                CEN_LA_SERVICE_ID, parameters);
 
         return getResult(analyser, "output");
     }
