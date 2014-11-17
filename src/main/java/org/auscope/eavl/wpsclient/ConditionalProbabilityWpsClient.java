@@ -28,6 +28,7 @@ public class ConditionalProbabilityWpsClient extends EavlWpsClient {
 
     public final static String IMPUTATION_NA_SERVICE_ID = "org.n52.wps.server.r.impna2";
     public final static String CEN_LA_SERVICE_ID = "org.n52.wps.server.r.cenlr";
+    public final static String HPI_KDE_SERVICE_ID = "org.n52.wps.server.r.hpikde";
     public final static String LOG_DENSITY_SERVICE_ID = "org.n52.wps.server.r.logDensity";
     public final static String DOUBLE_LOG_DENSITY_SERVICE_ID = "org.n52.wps.server.r.doubleLogDensity";
     public final static String MEAN_ACF_SERVICE_ID = "org.n52.wps.server.r.meanACF";
@@ -49,8 +50,8 @@ public class ConditionalProbabilityWpsClient extends EavlWpsClient {
         return imputationNA(data[0].length, toWpsInputString(data));
     }
 
-    public double[][] imputationNA(int nCols, String dataStr) throws WPSClientException,
-            IOException {
+    public double[][] imputationNA(int nCols, String dataStr)
+            throws WPSClientException, IOException {
 
         HashMap<String, Object> parameters = new HashMap<String, Object>();
         parameters.put("nCols", "" + nCols);
@@ -124,14 +125,14 @@ public class ConditionalProbabilityWpsClient extends EavlWpsClient {
         return getResult(analyser, "output");
     }
 
-    protected double[] quantile(String data, String q) throws WPSClientException,
-            IOException {
+    protected double[] quantile(String data, String q)
+            throws WPSClientException, IOException {
         HashMap<String, Object> parameters = new HashMap<String, Object>();
         parameters.put("dataStr", data);
-        parameters.put("v",q);
+        parameters.put("v", q);
 
-        ExecuteResponseAnalyser analyser = executeProcess(
-                QUANTILE_SERVICE_ID, parameters);
+        ExecuteResponseAnalyser analyser = executeProcess(QUANTILE_SERVICE_ID,
+                parameters);
 
         return getVectorResult(analyser, "output");
     }
@@ -231,7 +232,8 @@ public class ConditionalProbabilityWpsClient extends EavlWpsClient {
      * @throws IOException
      * @throws WPSClientException
      */
-    public double[][] cenLR(double[][] data) throws WPSClientException, IOException {
+    public double[][] cenLR(double[][] data) throws WPSClientException,
+            IOException {
         if (data.length == 0 || data[0].length == 0)
             return data;
 
@@ -245,15 +247,58 @@ public class ConditionalProbabilityWpsClient extends EavlWpsClient {
      * @throws IOException
      * @throws WPSClientException
      */
-    private double[][] cenLR(int nCols, String dataStr) throws WPSClientException, IOException {
+    private double[][] cenLR(int nCols, String dataStr)
+            throws WPSClientException, IOException {
         HashMap<String, Object> parameters = new HashMap<String, Object>();
         parameters.put("nCols", "" + nCols);
         parameters.put("dataStr", dataStr);
 
-        ExecuteResponseAnalyser analyser = executeProcess(
-                CEN_LA_SERVICE_ID, parameters);
+        ExecuteResponseAnalyser analyser = executeProcess(CEN_LA_SERVICE_ID,
+                parameters);
 
         return getResult(analyser, "output");
+    }
+
+    /**
+     * @param hpiKdeData
+     * @param hpiKdeData2
+     * @return
+     * @throws IOException
+     * @throws WPSClientException
+     */
+    public String hpiKdeJSON(double[][] gclr3, double[][] evalpts) throws WPSClientException, IOException {
+        if (gclr3.length == 0 || gclr3[0].length == 0)
+            throw new IllegalArgumentException("gclr3 can not be null or empty");
+
+        if (evalpts.length == 0 || evalpts[0].length == 0)
+            throw new IllegalArgumentException(
+                    "evalpts can not be null or empty");
+
+        return hpiKdeJSON(gclr3[0].length, toWpsInputString(gclr3),
+                evalpts[0].length, toWpsInputString(evalpts));
+    }
+
+    /**
+     * @param length
+     * @param wpsInputString
+     * @param length2
+     * @param wpsInputString2
+     * @return
+     * @throws IOException
+     * @throws WPSClientException
+     */
+    private String hpiKdeJSON(int nGclr3Cols, String gclr3Str, int nEvalptsCols,
+            String evalptsStr) throws WPSClientException, IOException {
+        HashMap<String, Object> parameters = new HashMap<String, Object>();
+        parameters.put("nGclr3Cols", "" + nGclr3Cols);
+        parameters.put("gclr3Str", gclr3Str);
+        parameters.put("nEvalptsCols", "" + nEvalptsCols);
+        parameters.put("eps", evalptsStr);
+
+        ExecuteResponseAnalyser analyser = executeProcess(HPI_KDE_SERVICE_ID,
+                parameters);
+
+        return getResultString(analyser, "output");
     }
 
 }

@@ -35,8 +35,10 @@ public class App {
         try {
 //            double[][] res = client.imputationNA(TestData.IMPUTATION_NA_DATA);
 //            print2DArray(res);
-            double[][] res = client.cenLR(TestData.CEN_LE_DATA);
-            print2DArray(res);
+            String res = client.hpiKdeJSON(TestData.HPI_KDE_DATA, TestData.HPI_KDE_DATA);
+           System.out.println(res);
+//            double[][] res = client.cenLR(TestData.CEN_LE_DATA);
+//            print2DArray(res);
 //            res = client.logDensity(TestData.LOG_DENSITY_DATA);
 //            print2DArray(res);
 //            ACF resMeanACF = client.meanACF(TestData.MEAN_ACF_DATA);
