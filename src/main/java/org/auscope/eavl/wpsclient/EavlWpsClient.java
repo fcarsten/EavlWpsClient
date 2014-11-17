@@ -78,7 +78,7 @@ public class EavlWpsClient {
 
     /**
      * @param data
-     *            Array of values (nulls encoded as Double.NaN)
+     *            Array of values (nulls encoded as NA)
      * @return
      */
     public static String toWpsInputString(Double[] data) {
