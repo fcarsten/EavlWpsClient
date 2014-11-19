@@ -279,6 +279,43 @@ public class ConditionalProbabilityWpsClient extends EavlWpsClient {
                 evalpts[0].length, toWpsInputString(evalpts));
     }
 
+    /**
+     * @param hpiKdeData
+     * @param hpiKdeData2
+     * @return
+     * @throws IOException
+     * @throws WPSClientException
+     */
+    public String hpiKdeJSON(Double[][] gclr3, Double[][] evalpts) throws WPSClientException, IOException {
+        if (gclr3.length == 0 || gclr3[0].length == 0)
+            throw new IllegalArgumentException("gclr3 can not be null or empty");
+
+        if (evalpts.length == 0 || evalpts[0].length == 0)
+            throw new IllegalArgumentException(
+                    "evalpts can not be null or empty");
+
+        return hpiKdeJSON(gclr3[0].length, toWpsInputString(gclr3),
+                evalpts[0].length, toWpsInputString(evalpts));
+    }
+
+    public String hpiKdeJSON(Double[][] proxies, Double[] cutoffCol, double cutoffValue) throws WPSClientException, IOException {
+        if (proxies.length == 0 || proxies[0].length == 0)
+            throw new IllegalArgumentException("proxies can not be null or empty");
+
+        if (cutoffCol.length != proxies.length)
+            throw new IllegalArgumentException(
+                    "cutoffCol has to be same size as proxies");
+
+        ArrayList<Double[]> gclr3List = new ArrayList<Double[]>();
+
+        for(int i=0;i<cutoffCol.length;i++) {
+            if(cutoffCol[i]>cutoffValue) {
+                gclr3List.add(proxies[i]);
+            }
+        }
+        return hpiKdeJSON(gclr3List.toArray(new Double[gclr3List.size()][proxies[0].length]), proxies);
+    }
+
     public String hpiKdeJSON(double[][] proxies, double[] cutoffCol, double cutoffValue) throws WPSClientException, IOException {
         if (proxies.length == 0 || proxies[0].length == 0)
             throw new IllegalArgumentException("proxies can not be null or empty");
