@@ -4,6 +4,7 @@
 package org.auscope.eavl.wpsclient;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.HashMap;
 
 import org.n52.wps.client.ExecuteResponseAnalyser;
@@ -276,6 +277,24 @@ public class ConditionalProbabilityWpsClient extends EavlWpsClient {
 
         return hpiKdeJSON(gclr3[0].length, toWpsInputString(gclr3),
                 evalpts[0].length, toWpsInputString(evalpts));
+    }
+
+    public String hpiKdeJSON(double[][] proxies, double[] cutoffCol, double cutoffValue) throws WPSClientException, IOException {
+        if (proxies.length == 0 || proxies[0].length == 0)
+            throw new IllegalArgumentException("proxies can not be null or empty");
+
+        if (cutoffCol.length != proxies.length)
+            throw new IllegalArgumentException(
+                    "cutoffCol has to be same size as proxies");
+
+        ArrayList<double[]> gclr3List = new ArrayList<double[]>();
+
+        for(int i=0;i<cutoffCol.length;i++) {
+        	if(cutoffCol[i]>cutoffValue) {
+        		gclr3List.add(proxies[i]);
+        	}
+        }
+        return hpiKdeJSON(gclr3List.toArray(new double[gclr3List.size()][proxies[0].length]), proxies);
     }
 
     /**
