@@ -17,344 +17,431 @@ import org.slf4j.LoggerFactory;
  *
  */
 public class ConditionalProbabilityWpsClient extends EavlWpsClient {
-    final static Logger logger = LoggerFactory
-            .getLogger(ConditionalProbabilityWpsClient.class);
+	final static Logger logger = LoggerFactory
+			.getLogger(ConditionalProbabilityWpsClient.class);
 
-    /**
-     * @param string
-     */
-    public ConditionalProbabilityWpsClient(String serviceUrl) {
-        super(serviceUrl);
-    }
+	/**
+	 * @param string
+	 */
+	public ConditionalProbabilityWpsClient(String serviceUrl) {
+		super(serviceUrl);
+	}
 
-    public final static String IMPUTATION_NA_SERVICE_ID = "org.n52.wps.server.r.impna2";
-    public final static String CEN_LA_SERVICE_ID = "org.n52.wps.server.r.cenlr";
-    public final static String HPI_KDE_SERVICE_ID = "org.n52.wps.server.r.hpikde";
-    public final static String LOG_DENSITY_SERVICE_ID = "org.n52.wps.server.r.logDensity";
-    public final static String DOUBLE_LOG_DENSITY_SERVICE_ID = "org.n52.wps.server.r.doubleLogDensity";
-    public final static String MEAN_ACF_SERVICE_ID = "org.n52.wps.server.r.meanACF";
-    public final static String QUANTILE_SERVICE_ID = "org.n52.wps.server.r.quantile";
+	public final static String IMPUTATION_NA_SERVICE_ID = "org.n52.wps.server.r.impna2";
+	public final static String CEN_LA_SERVICE_ID = "org.n52.wps.server.r.cenlr";
+	public final static String HPI_KDE_SERVICE_ID = "org.n52.wps.server.r.hpikde";
+	public final static String LOG_DENSITY_SERVICE_ID = "org.n52.wps.server.r.logDensity";
+	public final static String DOUBLE_LOG_DENSITY_SERVICE_ID = "org.n52.wps.server.r.doubleLogDensity";
+	public final static String MEAN_ACF_SERVICE_ID = "org.n52.wps.server.r.meanACF";
+	public final static String QUANTILE_SERVICE_ID = "org.n52.wps.server.r.quantile";
 
-    public double[][] imputationNA(double[][] data) throws WPSClientException,
-            IOException {
-        if (data.length == 0 || data[0].length == 0)
-            return data;
+	public double[][] imputationNA(double[][] data) throws WPSClientException,
+			IOException {
+		if (data.length == 0 || data[0].length == 0)
+			return data;
 
-        return imputationNA(data[0].length, toWpsInputString(data));
-    }
+		return imputationNA(data[0].length, toWpsInputString(data));
+	}
 
-    public double[][] imputationNA(Double[][] data) throws WPSClientException,
-            IOException {
-        if (data.length == 0 || data[0].length == 0)
-            return new double[][] {};
+	public double[][] imputationNA(Double[][] data) throws WPSClientException,
+			IOException {
+		if (data.length == 0 || data[0].length == 0)
+			return new double[][] {};
 
-        return imputationNA(data[0].length, toWpsInputString(data));
-    }
+		return imputationNA(data[0].length, toWpsInputString(data));
+	}
 
-    public double[][] imputationNA(int nCols, String dataStr)
-            throws WPSClientException, IOException {
+	public double[][] imputationNA(int nCols, String dataStr)
+			throws WPSClientException, IOException {
 
-        HashMap<String, Object> parameters = new HashMap<String, Object>();
-        parameters.put("nCols", "" + nCols);
-        parameters.put("dataStr", dataStr);
+		HashMap<String, Object> parameters = new HashMap<String, Object>();
+		parameters.put("nCols", "" + nCols);
+		parameters.put("dataStr", dataStr);
 
-        ExecuteResponseAnalyser analyser = executeProcess(
-                IMPUTATION_NA_SERVICE_ID, parameters);
+		ExecuteResponseAnalyser analyser = executeProcess(
+				IMPUTATION_NA_SERVICE_ID, parameters);
 
-        return getResult(analyser, "output");
-    }
+		return getResult(analyser, "output");
+	}
 
-    /**
-     * @param data
-     *            String of Comma separated values
-     * @return
-     * @throws WPSClientException
-     * @throws IOException
-     */
-    public double[][] logDensity(double[] data) throws WPSClientException,
-            IOException {
-        if (data == null)
-            return null;
-        if (data.length == 0)
-            return new double[0][0];
+	/**
+	 * @param data
+	 *            String of Comma separated values
+	 * @return
+	 * @throws WPSClientException
+	 * @throws IOException
+	 */
+	public double[][] logDensity(double[] data) throws WPSClientException,
+			IOException {
+		if (data == null)
+			return null;
+		if (data.length == 0)
+			return new double[0][0];
 
-        return logDensity(toWpsInputString(data));
-    }
+		return logDensity(toWpsInputString(data));
+	}
 
-    public double[] quantile(double[] data, double[] q)
-            throws WPSClientException, IOException {
-        if (data == null || q == null)
-            return null;
-        if (data.length == 0 || q.length == 0)
-            return new double[0];
+	public double[] quantile(double[] data, double[] q)
+			throws WPSClientException, IOException {
+		if (data == null || q == null)
+			return null;
+		if (data.length == 0 || q.length == 0)
+			return new double[0];
 
-        return quantile(toWpsInputString(data), toWpsInputString(q));
-    }
+		return quantile(toWpsInputString(data), toWpsInputString(q));
+	}
 
-    /**
-     * @param data
-     *            Array of values (nulls encoded as Double.NaN)
-     * @return
-     * @throws WPSClientException
-     * @throws IOException
-     */
-    public double[][] logDensity(Double[] data) throws WPSClientException,
-            IOException {
-        if (data == null)
-            return null;
-        if (data.length == 0)
-            return new double[0][0];
+	/**
+	 * @param data
+	 *            Array of values (nulls encoded as Double.NaN)
+	 * @return
+	 * @throws WPSClientException
+	 * @throws IOException
+	 */
+	public double[][] logDensity(Double[] data) throws WPSClientException,
+			IOException {
+		if (data == null)
+			return null;
+		if (data.length == 0)
+			return new double[0][0];
 
-        return logDensity(toWpsInputString(data));
-    }
+		return logDensity(toWpsInputString(data));
+	}
 
-    /**
-     * @param data
-     *            String of Comma separated values
-     * @return
-     * @throws WPSClientException
-     * @throws IOException
-     */
-    protected double[][] logDensity(String data) throws WPSClientException,
-            IOException {
-        HashMap<String, Object> parameters = new HashMap<String, Object>();
-        parameters.put("data", data);
+	/**
+	 * @param data
+	 *            String of Comma separated values
+	 * @return
+	 * @throws WPSClientException
+	 * @throws IOException
+	 */
+	protected double[][] logDensity(String data) throws WPSClientException,
+			IOException {
+		HashMap<String, Object> parameters = new HashMap<String, Object>();
+		parameters.put("data", data);
 
-        ExecuteResponseAnalyser analyser = executeProcess(
-                LOG_DENSITY_SERVICE_ID, parameters);
+		ExecuteResponseAnalyser analyser = executeProcess(
+				LOG_DENSITY_SERVICE_ID, parameters);
 
-        return getResult(analyser, "output");
-    }
+		return getResult(analyser, "output");
+	}
 
-    protected double[] quantile(String data, String q)
-            throws WPSClientException, IOException {
-        HashMap<String, Object> parameters = new HashMap<String, Object>();
-        parameters.put("dataStr", data);
-        parameters.put("v", q);
+	protected double[] quantile(String data, String q)
+			throws WPSClientException, IOException {
+		HashMap<String, Object> parameters = new HashMap<String, Object>();
+		parameters.put("dataStr", data);
+		parameters.put("v", q);
 
-        ExecuteResponseAnalyser analyser = executeProcess(QUANTILE_SERVICE_ID,
-                parameters);
+		ExecuteResponseAnalyser analyser = executeProcess(QUANTILE_SERVICE_ID,
+				parameters);
 
-        return getVectorResult(analyser, "output");
-    }
+		return getVectorResult(analyser, "output");
+	}
 
-    /**
-     * @param meanAcfData
-     * @return
-     * @throws IOException
-     * @throws WPSClientException
-     */
-    public ACF meanACF(Object[][] data) throws WPSClientException, IOException {
-        if (data == null)
-            return null;
-        double ci = Double.NaN;
-        double[] acf = new double[0];
-        if (data.length > 0) {
-            HashMap<String, Object> parameters = new HashMap<String, Object>();
-            String dataStr = toWpsInputString(data);
-            parameters.put("dataStr", dataStr);
-            ExecuteResponseAnalyser analyser = executeProcess(
-                    MEAN_ACF_SERVICE_ID, parameters);
+	/**
+	 * @param meanAcfData
+	 * @return
+	 * @throws IOException
+	 * @throws WPSClientException
+	 */
+	public ACF meanACF(Object[][] data) throws WPSClientException, IOException {
+		if (data == null)
+			return null;
+		double ci = Double.NaN;
+		double[] acf = new double[0];
+		if (data.length > 0) {
+			HashMap<String, Object> parameters = new HashMap<String, Object>();
+			String dataStr = toWpsInputString(data);
+			parameters.put("dataStr", dataStr);
+			ExecuteResponseAnalyser analyser = executeProcess(
+					MEAN_ACF_SERVICE_ID, parameters);
 
-            double[][] res = getResult(analyser, "output");
+			double[][] res = getResult(analyser, "output");
 
-            if (res.length > 0 && res[0].length > 0) {
-                ci = res[0][1];
-                acf = new double[res.length];
-                for (int i = 0; i < res.length; i++) {
-                    acf[i] = res[i][0];
-                }
-            } else {
-                throw new WPSClientException(
-                        "Invalid server response for meanACF: "
-                                + getResultString(analyser, "output"));
-            }
-        }
-        return new ACF(acf, ci);
-    }
+			if (res.length > 0 && res[0].length > 0) {
+				ci = res[0][1];
+				acf = new double[res.length];
+				for (int i = 0; i < res.length; i++) {
+					acf[i] = res[i][0];
+				}
+			} else {
+				throw new WPSClientException(
+						"Invalid server response for meanACF: "
+								+ getResultString(analyser, "output"));
+			}
+		}
+		return new ACF(acf, ci);
+	}
 
-    /**
-     * @param data
-     * @param v
-     *            threshold
-     * @return
-     * @throws IOException
-     * @throws WPSClientException
-     */
-    public double[][] doubleLogDensity(double[][] data, double v)
-            throws WPSClientException, IOException {
-        if (data == null)
-            return null;
-        if (data.length == 0 || data[0].length == 0)
-            return new double[0][0];
+	/**
+	 * @param data
+	 * @param v
+	 *            threshold
+	 * @return
+	 * @throws IOException
+	 * @throws WPSClientException
+	 */
+	public double[][] doubleLogDensity(double[][] data, double v)
+			throws WPSClientException, IOException {
+		if (data == null)
+			return null;
+		if (data.length == 0 || data[0].length == 0)
+			return new double[0][0];
 
-        return doubleLogDensity(toWpsInputString(data), v);
-    }
+		return doubleLogDensity(toWpsInputString(data), v);
+	}
 
-    /**
-     * @param data
-     * @param v
-     *            threshold
-     * @return
-     * @throws IOException
-     * @throws WPSClientException
-     */
-    public double[][] doubleLogDensity(Double[][] data, double v)
-            throws WPSClientException, IOException {
-        if (data == null)
-            return null;
-        if (data.length == 0 || data[0].length == 0)
-            return new double[0][0];
+	/**
+	 * @param data
+	 * @param v
+	 *            threshold
+	 * @return
+	 * @throws IOException
+	 * @throws WPSClientException
+	 */
+	public double[][] doubleLogDensity(Double[][] data, double v)
+			throws WPSClientException, IOException {
+		if (data == null)
+			return null;
+		if (data.length == 0 || data[0].length == 0)
+			return new double[0][0];
 
-        return doubleLogDensity(toWpsInputString(data), v);
-    }
+		return doubleLogDensity(toWpsInputString(data), v);
+	}
 
-    /**
-     * @param wpsInputString
-     * @return
-     * @throws IOException
-     * @throws WPSClientException
-     */
-    private double[][] doubleLogDensity(String dataStr, double v)
-            throws WPSClientException, IOException {
-        HashMap<String, Object> parameters = new HashMap<String, Object>();
-        parameters.put("dataStr", dataStr);
-        parameters.put("v", v);
+	/**
+	 * @param wpsInputString
+	 * @return
+	 * @throws IOException
+	 * @throws WPSClientException
+	 */
+	private double[][] doubleLogDensity(String dataStr, double v)
+			throws WPSClientException, IOException {
+		HashMap<String, Object> parameters = new HashMap<String, Object>();
+		parameters.put("dataStr", dataStr);
+		parameters.put("v", v);
 
-        ExecuteResponseAnalyser analyser = executeProcess(
-                DOUBLE_LOG_DENSITY_SERVICE_ID, parameters);
+		ExecuteResponseAnalyser analyser = executeProcess(
+				DOUBLE_LOG_DENSITY_SERVICE_ID, parameters);
 
-        return getResult(analyser, "output");
-    }
+		return getResult(analyser, "output");
+	}
 
-    /**
-     * @param cenLeData
-     * @return
-     * @throws IOException
-     * @throws WPSClientException
-     */
-    public double[][] cenLR(double[][] data) throws WPSClientException,
-            IOException {
-        if (data.length == 0 || data[0].length == 0)
-            return data;
+	/**
+	 * @param cenLeData
+	 * @return
+	 * @throws IOException
+	 * @throws WPSClientException
+	 */
+	public double[][] cenLR(double[][] data) throws WPSClientException,
+			IOException {
+		if (data.length == 0 || data[0].length == 0)
+			return data;
 
-        return cenLR(data[0].length, toWpsInputString(data));
-    }
+		return cenLR(data[0].length, toWpsInputString(data));
+	}
 
-    /**
-     * @param length
-     * @param wpsInputString
-     * @return
-     * @throws IOException
-     * @throws WPSClientException
-     */
-    private double[][] cenLR(int nCols, String dataStr)
-            throws WPSClientException, IOException {
-        HashMap<String, Object> parameters = new HashMap<String, Object>();
-        parameters.put("nCols", "" + nCols);
-        parameters.put("dataStr", dataStr);
+	/**
+	 * @param length
+	 * @param wpsInputString
+	 * @return
+	 * @throws IOException
+	 * @throws WPSClientException
+	 */
+	private double[][] cenLR(int nCols, String dataStr)
+			throws WPSClientException, IOException {
+		HashMap<String, Object> parameters = new HashMap<String, Object>();
+		parameters.put("nCols", "" + nCols);
+		parameters.put("dataStr", dataStr);
 
-        ExecuteResponseAnalyser analyser = executeProcess(CEN_LA_SERVICE_ID,
-                parameters);
+		ExecuteResponseAnalyser analyser = executeProcess(CEN_LA_SERVICE_ID,
+				parameters);
 
-        return getResult(analyser, "output");
-    }
+		return getResult(analyser, "output");
+	}
 
-    /**
-     * @param hpiKdeData
-     * @param hpiKdeData2
-     * @return
-     * @throws IOException
-     * @throws WPSClientException
-     */
-    public String hpiKdeJSON(double[][] gclr3, double[][] evalpts) throws WPSClientException, IOException {
-        if (gclr3.length == 0 || gclr3[0].length == 0)
-            throw new IllegalArgumentException("gclr3 can not be null or empty");
+	/**
+	 * @param hpiKdeData
+	 * @param hpiKdeData2
+	 * @return
+	 * @throws IOException
+	 * @throws WPSClientException
+	 */
+	public String hpiKdeJSON(double[][] gclr3, double[][] evalpts)
+			throws WPSClientException, IOException {
+		if (gclr3.length == 0 || gclr3[0].length == 0)
+			throw new IllegalArgumentException("gclr3 can not be null or empty");
 
-        if (evalpts.length == 0 || evalpts[0].length == 0)
-            throw new IllegalArgumentException(
-                    "evalpts can not be null or empty");
+		if (evalpts.length == 0 || evalpts[0].length == 0)
+			throw new IllegalArgumentException(
+					"evalpts can not be null or empty");
 
-        return hpiKdeJSON(gclr3[0].length, toWpsInputString(gclr3),
-                evalpts[0].length, toWpsInputString(evalpts));
-    }
+		return hpiKdeJSON(gclr3[0].length, toWpsInputString(gclr3),
+				evalpts[0].length, toWpsInputString(evalpts));
+	}
 
-    /**
-     * @param hpiKdeData
-     * @param hpiKdeData2
-     * @return
-     * @throws IOException
-     * @throws WPSClientException
-     */
-    public String hpiKdeJSON(Double[][] gclr3, Double[][] evalpts) throws WPSClientException, IOException {
-        if (gclr3.length == 0 || gclr3[0].length == 0)
-            throw new IllegalArgumentException("gclr3 can not be null or empty");
+	/**
+	 * Make sure all probabilities are between 0 and 1. Fixed inline.
+	 * @param condProb
+	 */
+	public static void fixCondProb(double[] condProb) {
+		for (int i = 0; i < condProb.length; i++) {
+			if (condProb[i] < 0)
+				condProb[i] = 0;
+			if (condProb[i] > 1)
+				condProb[i] = 1;
+		}
+	}
 
-        if (evalpts.length == 0 || evalpts[0].length == 0)
-            throw new IllegalArgumentException(
-                    "evalpts can not be null or empty");
+	/**
+	 * Create summary string for given conditional probability
+	 * @param condProb
+	 * @return
+	 */
+	public static String checkCondProb(double[] condProb) {
+		int numOver = 0;
+		int numUnder = 0;
+		double max = condProb[0];
+		double min = condProb[0];
+		for (int i = 0; i < condProb.length; i++) {
+			double d = condProb[i];
+			if (d > max) {
+				max = d;
+			}
+			if (d < min) {
+				min = d;
+			}
+			if (d < 0)
+				numUnder++;
+			if (d > 1)
+				numOver++;
+		}
+		return "number of cond prob values < 0: " + numUnder + "\n"
+				+ "min cond prob:" + min + "\n"
+				+ "number of cond prob values > 1: " + numOver + "\n"
+				+ "max cond prob: " + max + " \n\n";
+	}
 
-        return hpiKdeJSON(gclr3[0].length, toWpsInputString(gclr3),
-                evalpts[0].length, toWpsInputString(evalpts));
-    }
+	/**
+	 *
+	 * @param gclr3 subset of geochem elements (with CLR transform)
+	 * @param gclr3Hi subset of geochem elements with high values of desired element
+	 * @param gkde kernel density estimate for all observations
+	 * @param gHikde kernel density estimate for high observations
+	 * @return conditional probability
+	 */
+	public static double[] conditionalProbability(double[][] gclr3,
+			double[][] gclr3Hi, double[] gkde, double[] gHikde) {
+		return conditionalProbability(gclr3.length, gclr3Hi.length, gkde,
+				gHikde);
+	}
 
-    public String hpiKdeJSON(Double[][] proxies, Double[] cutoffCol, double cutoffValue) throws WPSClientException, IOException {
-        if (proxies.length == 0 || proxies[0].length == 0)
-            throw new IllegalArgumentException("proxies can not be null or empty");
+	/**
+	 *
+	 * @param numSamples number of all observations
+	 * @param numHiSamples number of observations with high values of desired element
+	 * @param gkde kernel density estimate for all observations
+	 * @param gHikde kernel density estimate for high observations
+	 * @return
+	 */
+	public static double[] conditionalProbability(double numSamples,
+			double numHiSamples, double[] gkde, double[] gHikde) {
+		double priorProb = numHiSamples / numSamples;
+		double[] res = new double[gkde.length];
+		for (int i = 0; i < res.length; i++) {
+			res[i] = (gHikde[i] * priorProb) / gkde[i];
+		}
+		return res;
+	}
 
-        if (cutoffCol.length != proxies.length)
-            throw new IllegalArgumentException(
-                    "cutoffCol has to be same size as proxies");
+	/**
+	 * @param hpiKdeData
+	 * @param hpiKdeData2
+	 * @return
+	 * @throws IOException
+	 * @throws WPSClientException
+	 */
+	public String hpiKdeJSON(Double[][] gclr3, Double[][] evalpts)
+			throws WPSClientException, IOException {
+		if (gclr3.length == 0 || gclr3[0].length == 0)
+			throw new IllegalArgumentException("gclr3 can not be null or empty");
 
-        ArrayList<Double[]> gclr3List = new ArrayList<Double[]>();
+		if (evalpts.length == 0 || evalpts[0].length == 0)
+			throw new IllegalArgumentException(
+					"evalpts can not be null or empty");
 
-        for(int i=0;i<cutoffCol.length;i++) {
-            if(cutoffCol[i]>cutoffValue) {
-                gclr3List.add(proxies[i]);
-            }
-        }
-        return hpiKdeJSON(gclr3List.toArray(new Double[gclr3List.size()][proxies[0].length]), proxies);
-    }
+		return hpiKdeJSON(gclr3[0].length, toWpsInputString(gclr3),
+				evalpts[0].length, toWpsInputString(evalpts));
+	}
 
-    public String hpiKdeJSON(double[][] proxies, double[] cutoffCol, double cutoffValue) throws WPSClientException, IOException {
-        if (proxies.length == 0 || proxies[0].length == 0)
-            throw new IllegalArgumentException("proxies can not be null or empty");
+	public String hpiKdeJSON(Double[][] proxies, Double[] cutoffCol,
+			double cutoffValue) throws WPSClientException, IOException {
+		if (proxies.length == 0 || proxies[0].length == 0)
+			throw new IllegalArgumentException(
+					"proxies can not be null or empty");
 
-        if (cutoffCol.length != proxies.length)
-            throw new IllegalArgumentException(
-                    "cutoffCol has to be same size as proxies");
+		if (cutoffCol.length != proxies.length)
+			throw new IllegalArgumentException(
+					"cutoffCol has to be same size as proxies");
 
-        ArrayList<double[]> gclr3List = new ArrayList<double[]>();
+		ArrayList<Double[]> gclr3List = new ArrayList<Double[]>();
 
-        for(int i=0;i<cutoffCol.length;i++) {
-        	if(cutoffCol[i]>cutoffValue) {
-        		gclr3List.add(proxies[i]);
-        	}
-        }
-        return hpiKdeJSON(gclr3List.toArray(new double[gclr3List.size()][proxies[0].length]), proxies);
-    }
+		for (int i = 0; i < cutoffCol.length; i++) {
+			if (cutoffCol[i] > cutoffValue) {
+				gclr3List.add(proxies[i]);
+			}
+		}
+		return hpiKdeJSON(
+				gclr3List
+						.toArray(new Double[gclr3List.size()][proxies[0].length]),
+				proxies);
+	}
 
-    /**
-     * @param length
-     * @param wpsInputString
-     * @param length2
-     * @param wpsInputString2
-     * @return
-     * @throws IOException
-     * @throws WPSClientException
-     */
-    private String hpiKdeJSON(int nGclr3Cols, String gclr3Str, int nEvalptsCols,
-            String evalptsStr) throws WPSClientException, IOException {
-        HashMap<String, Object> parameters = new HashMap<String, Object>();
-        parameters.put("nGclr3Cols", "" + nGclr3Cols);
-        parameters.put("gclr3Str", gclr3Str);
-        parameters.put("nEvalptsCols", "" + nEvalptsCols);
-        parameters.put("eps", evalptsStr);
+	public String hpiKdeJSON(double[][] proxies, double[] cutoffCol,
+			double cutoffValue) throws WPSClientException, IOException {
+		if (proxies.length == 0 || proxies[0].length == 0)
+			throw new IllegalArgumentException(
+					"proxies can not be null or empty");
 
-        ExecuteResponseAnalyser analyser = executeProcess(HPI_KDE_SERVICE_ID,
-                parameters);
+		if (cutoffCol.length != proxies.length)
+			throw new IllegalArgumentException(
+					"cutoffCol has to be same size as proxies");
 
-        return getResultString(analyser, "output");
-    }
+		ArrayList<double[]> gclr3List = new ArrayList<double[]>();
+
+		for (int i = 0; i < cutoffCol.length; i++) {
+			if (cutoffCol[i] > cutoffValue) {
+				gclr3List.add(proxies[i]);
+			}
+		}
+		return hpiKdeJSON(
+				gclr3List
+						.toArray(new double[gclr3List.size()][proxies[0].length]),
+				proxies);
+	}
+
+	/**
+	 * @param length
+	 * @param wpsInputString
+	 * @param length2
+	 * @param wpsInputString2
+	 * @return
+	 * @throws IOException
+	 * @throws WPSClientException
+	 */
+	private String hpiKdeJSON(int nGclr3Cols, String gclr3Str,
+			int nEvalptsCols, String evalptsStr) throws WPSClientException,
+			IOException {
+		HashMap<String, Object> parameters = new HashMap<String, Object>();
+		parameters.put("nGclr3Cols", "" + nGclr3Cols);
+		parameters.put("gclr3Str", gclr3Str);
+		parameters.put("nEvalptsCols", "" + nEvalptsCols);
+		parameters.put("eps", evalptsStr);
+
+		ExecuteResponseAnalyser analyser = executeProcess(HPI_KDE_SERVICE_ID,
+				parameters);
+
+		return getResultString(analyser, "output");
+	}
 
 }
