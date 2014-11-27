@@ -182,7 +182,7 @@ public class EavlWpsClient {
 
     public static double[] parseWpsVectorOutput(String resultStr) {
         double[] result = null;
-
+        resultStr= resultStr.replaceAll("[\n\r]+", ",");
         String[] vals = resultStr.split(",");
         result = new double[vals.length];
         int c = 0;
