@@ -91,6 +91,16 @@ public class ConditionalProbabilityWpsClient extends EavlWpsClient {
 		return quantile(toWpsInputString(data), toWpsInputString(q));
 	}
 
+	public WpsAsyncResult<double[]> quantileAsync(double[] data, double[] q)
+			throws WPSClientException, IOException {
+		if (data == null || q == null)
+			return null;
+		if (data.length == 0 || q.length == 0)
+			return new WpsAsyncEmptyVectorResult();
+
+		return quantileAsync(toWpsInputString(data), toWpsInputString(q));
+	}
+
 	/**
 	 * @param data
 	 *            Array of values (nulls encoded as Double.NaN)
@@ -136,6 +146,18 @@ public class ConditionalProbabilityWpsClient extends EavlWpsClient {
 				parameters);
 
 		return getVectorResult(analyser, "output");
+	}
+
+	protected WpsAsyncResult<double[]> quantileAsync(String data, String q)
+			throws WPSClientException, IOException {
+		HashMap<String, Object> parameters = new HashMap<String, Object>();
+		parameters.put("dataStr", data);
+		parameters.put("v", q);
+
+		final AsyncExecuteResponseAnalyser analyser = executeProcessAsync(
+				QUANTILE_SERVICE_ID, parameters);
+
+		return new WpsAsyncVectorResult(analyser, "output");
 	}
 
 	/**
@@ -281,7 +303,28 @@ public class ConditionalProbabilityWpsClient extends EavlWpsClient {
 	}
 
 	/**
+	 * @param hpiKdeData
+	 * @param hpiKdeData2
+	 * @return
+	 * @throws IOException
+	 * @throws WPSClientException
+	 */
+	public WpsAsyncResult<String> hpiKdeJSONAsync(double[][] gclr3, double[][] evalpts)
+			throws WPSClientException, IOException {
+		if (gclr3.length == 0 || gclr3[0].length == 0)
+			throw new IllegalArgumentException("gclr3 can not be null or empty");
+
+		if (evalpts.length == 0 || evalpts[0].length == 0)
+			throw new IllegalArgumentException(
+					"evalpts can not be null or empty");
+
+		return hpiKdeJSONAsync(gclr3[0].length, toWpsInputString(gclr3),
+				evalpts[0].length, toWpsInputString(evalpts));
+	}
+
+	/**
 	 * Make sure all probabilities are between 0 and 1. Fixed inline.
+	 *
 	 * @param condProb
 	 */
 	public static void fixCondProb(double[] condProb) {
@@ -295,6 +338,7 @@ public class ConditionalProbabilityWpsClient extends EavlWpsClient {
 
 	/**
 	 * Create summary string for given conditional probability
+	 *
 	 * @param condProb
 	 * @return
 	 */
@@ -324,10 +368,14 @@ public class ConditionalProbabilityWpsClient extends EavlWpsClient {
 
 	/**
 	 *
-	 * @param gclr3 subset of geochem elements (with CLR transform)
-	 * @param gclr3Hi subset of geochem elements with high values of desired element
-	 * @param gkde kernel density estimate for all observations
-	 * @param gHikde kernel density estimate for high observations
+	 * @param gclr3
+	 *            subset of geochem elements (with CLR transform)
+	 * @param gclr3Hi
+	 *            subset of geochem elements with high values of desired element
+	 * @param gkde
+	 *            kernel density estimate for all observations
+	 * @param gHikde
+	 *            kernel density estimate for high observations
 	 * @return conditional probability
 	 */
 	public static double[] conditionalProbability(double[][] gclr3,
@@ -338,10 +386,14 @@ public class ConditionalProbabilityWpsClient extends EavlWpsClient {
 
 	/**
 	 *
-	 * @param numSamples number of all observations
-	 * @param numHiSamples number of observations with high values of desired element
-	 * @param gkde kernel density estimate for all observations
-	 * @param gHikde kernel density estimate for high observations
+	 * @param numSamples
+	 *            number of all observations
+	 * @param numHiSamples
+	 *            number of observations with high values of desired element
+	 * @param gkde
+	 *            kernel density estimate for all observations
+	 * @param gHikde
+	 *            kernel density estimate for high observations
 	 * @return
 	 */
 	public static double[] conditionalProbability(double numSamples,
@@ -444,4 +496,20 @@ public class ConditionalProbabilityWpsClient extends EavlWpsClient {
 		return getResultString(analyser, "output");
 	}
 
+	private WpsAsyncResult<String> hpiKdeJSONAsync(int nGclr3Cols,
+			String gclr3Str, int nEvalptsCols, String evalptsStr)
+			throws WPSClientException, IOException {
+		HashMap<String, Object> parameters = new HashMap<String, Object>();
+		parameters.put("nGclr3Cols", "" + nGclr3Cols);
+		parameters.put("gclr3Str", gclr3Str);
+		parameters.put("nEvalptsCols", "" + nEvalptsCols);
+		parameters.put("eps", evalptsStr);
+
+		AsyncExecuteResponseAnalyser analyser = executeProcessAsync(
+				HPI_KDE_SERVICE_ID, parameters);
+
+		return new WpsAsyncStringResult(analyser, "output");
+
+		// return getResultString(analyser, "output");
+	}
 }
