@@ -39,24 +39,46 @@ public class AsyncExecuteResponseAnalyser {
 	final static Logger logger = LoggerFactory
 			.getLogger(AsyncExecuteResponseAnalyser.class);
 
-	private ExecuteDocument execute;
-	private ExecuteResponseDocument responseDoc;
-	private ProcessDescriptionType pd;
-	private String statusEndpoint;
+	private ExecuteDocument execute=null;
+//	private ExecuteResponseDocument responseDoc;
+	private ProcessDescriptionType pd=null;
+	private String statusEndpoint=null;
 
-	private ExecuteResponseDocument statusResponseDoc;
-	private ExecuteResponseDocument resultResponseDoc;
+	private ExecuteResponseDocument resultResponseDoc=null;
 
-	private String error;
+	private String error=null;
 	private int percentComplete;
+
+	/**
+	 * Returns percentage of completion of the WPS call. There is no guaranteed corrolation
+	 * between percentage and total runtime.
+	 * Especially, many services will only ever return 0%.
+	 * @return the percentComplete
+	 */
+	public int getPercentComplete() {
+		return percentComplete;
+	}
+
 
 	public AsyncExecuteResponseAnalyser(ExecuteDocument execute,
 			ExecuteResponseDocument responseDoc, ProcessDescriptionType pd) {
 		this.execute = execute;
-		this.responseDoc = responseDoc;
+//		this.responseDoc = responseDoc;
 		this.statusEndpoint = responseDoc.getExecuteResponse()
 				.getStatusLocation();
 		this.pd = pd;
+	}
+
+
+	/**
+	 * Low cost call to check whether the WPS process has finished; i.e. results are ready or an error has occurred.
+	 * This call returns  the result of the last updateStatus() call and does not
+	 * actually check with the WPS server.
+	 * To get an up-to-date status call updateStatus()
+	 * @return
+	 */
+	public boolean hasFinished() {
+		return error!=null || resultResponseDoc!=null;
 	}
 
 	/**
@@ -67,10 +89,12 @@ public class AsyncExecuteResponseAnalyser {
 	 * @throws WPSClientException
 	 */
 	public synchronized boolean updateStatus() throws WPSClientException {
+		if(hasFinished()) return true;
+
 		InputStream is = retrieveStatusUpdate();
 		Document documentObj = checkInputStream(is);
 		try {
-			statusResponseDoc = ExecuteResponseDocument.Factory
+			ExecuteResponseDocument statusResponseDoc = ExecuteResponseDocument.Factory
 					.parse(documentObj);
 			if (statusResponseDoc.getExecuteResponse().isSetStatusLocation()) {
 				StatusType statusType = statusResponseDoc.getExecuteResponse()
@@ -109,6 +133,11 @@ public class AsyncExecuteResponseAnalyser {
 		return false;
 	}
 
+	/**
+	 * Copied from North52
+	 * @return
+	 * @throws WPSClientException
+	 */
 	private InputStream retrieveStatusUpdate() throws WPSClientException {
 		try {
 			URL url = new URL(statusEndpoint);
@@ -123,12 +152,17 @@ public class AsyncExecuteResponseAnalyser {
 			}
 			return input;
 		} catch (MalformedURLException e) {
-			throw new WPSClientException("URL seems to be unvalid", e);
+			throw new WPSClientException("URL seems to be invalid", e);
 		} catch (IOException e) {
 			throw new WPSClientException("Error while transmission", e);
 		}
 	}
 
+	/**
+	 * Copied from North52
+	 * @param node
+	 * @return
+	 */
 	private Node getFirstElementNode(Node node) {
 		if (node == null) {
 			return null;
@@ -141,6 +175,12 @@ public class AsyncExecuteResponseAnalyser {
 
 	}
 
+	/**
+	 * Copied from North52
+	 * @param is
+	 * @return
+	 * @throws WPSClientException
+	 */
 	private Document checkInputStream(InputStream is) throws WPSClientException {
 		DocumentBuilderFactory fac = DocumentBuilderFactory.newInstance();
 		fac.setNamespaceAware(true);
@@ -173,6 +213,12 @@ public class AsyncExecuteResponseAnalyser {
 		}
 	}
 
+	/**
+	 * Returns the result of the WPS call. Wait for completion if not completed yet.
+	 *
+	 * @return
+	 * @throws WPSClientException if WPS called resulted in an error.
+	 */
 	public ExecuteResponseAnalyser get() throws WPSClientException {
 		if (resultResponseDoc != null)
 			return new ExecuteResponseAnalyser(execute, resultResponseDoc, pd);

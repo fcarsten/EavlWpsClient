@@ -23,7 +23,7 @@ public class WpsAsyncStringResult extends WpsAsyncResultImpl<String> {
 		super(analyser, new AsyncResultRetriever<String>() {
 			public String retrieve() throws FileNotFoundException,
 					WPSClientException {
-				return getResultString(analyser.get(), "output");
+				return WpsUtils.getResultString(analyser.get(), "output");
 			}
 		});
 	}

@@ -51,7 +51,7 @@ public class ConditionalProbabilityWpsClient extends EavlWpsClient {
 		return imputationNA(data[0].length, toWpsInputString(data));
 	}
 
-	public double[][] imputationNA(int nCols, String dataStr)
+	protected double[][] imputationNA(int nCols, String dataStr)
 			throws WPSClientException, IOException {
 
 		HashMap<String, Object> parameters = new HashMap<String, Object>();
@@ -61,7 +61,7 @@ public class ConditionalProbabilityWpsClient extends EavlWpsClient {
 		ExecuteResponseAnalyser analyser = executeProcess(
 				IMPUTATION_NA_SERVICE_ID, parameters);
 
-		return getResult(analyser, "output");
+		return WpsUtils.getMatrixResult(analyser, "output");
 	}
 
 	/**
@@ -133,7 +133,7 @@ public class ConditionalProbabilityWpsClient extends EavlWpsClient {
 		ExecuteResponseAnalyser analyser = executeProcess(
 				LOG_DENSITY_SERVICE_ID, parameters);
 
-		return getResult(analyser, "output");
+		return WpsUtils.getMatrixResult(analyser, "output");
 	}
 
 	protected double[] quantile(String data, String q)
@@ -145,7 +145,7 @@ public class ConditionalProbabilityWpsClient extends EavlWpsClient {
 		ExecuteResponseAnalyser analyser = executeProcess(QUANTILE_SERVICE_ID,
 				parameters);
 
-		return getVectorResult(analyser, "output");
+		return WpsUtils.getVectorResult(analyser, "output");
 	}
 
 	protected WpsAsyncResult<double[]> quantileAsync(String data, String q)
@@ -178,7 +178,7 @@ public class ConditionalProbabilityWpsClient extends EavlWpsClient {
 			ExecuteResponseAnalyser analyser = executeProcess(
 					MEAN_ACF_SERVICE_ID, parameters);
 
-			double[][] res = getResult(analyser, "output");
+			double[][] res = WpsUtils.getMatrixResult(analyser, "output");
 
 			if (res.length > 0 && res[0].length > 0) {
 				ci = res[0][1];
@@ -189,7 +189,7 @@ public class ConditionalProbabilityWpsClient extends EavlWpsClient {
 			} else {
 				throw new WPSClientException(
 						"Invalid server response for meanACF: "
-								+ getResultString(analyser, "output"));
+								+ WpsUtils.getResultString(analyser, "output"));
 			}
 		}
 		return new ACF(acf, ci);
@@ -237,7 +237,7 @@ public class ConditionalProbabilityWpsClient extends EavlWpsClient {
 	 * @throws IOException
 	 * @throws WPSClientException
 	 */
-	private double[][] doubleLogDensity(String dataStr, double v)
+	protected double[][] doubleLogDensity(String dataStr, double v)
 			throws WPSClientException, IOException {
 		HashMap<String, Object> parameters = new HashMap<String, Object>();
 		parameters.put("dataStr", dataStr);
@@ -246,7 +246,7 @@ public class ConditionalProbabilityWpsClient extends EavlWpsClient {
 		ExecuteResponseAnalyser analyser = executeProcess(
 				DOUBLE_LOG_DENSITY_SERVICE_ID, parameters);
 
-		return getResult(analyser, "output");
+		return WpsUtils.getMatrixResult(analyser, "output");
 	}
 
 	/**
@@ -270,7 +270,7 @@ public class ConditionalProbabilityWpsClient extends EavlWpsClient {
 	 * @throws IOException
 	 * @throws WPSClientException
 	 */
-	private double[][] cenLR(int nCols, String dataStr)
+	protected double[][] cenLR(int nCols, String dataStr)
 			throws WPSClientException, IOException {
 		HashMap<String, Object> parameters = new HashMap<String, Object>();
 		parameters.put("nCols", "" + nCols);
@@ -279,7 +279,7 @@ public class ConditionalProbabilityWpsClient extends EavlWpsClient {
 		ExecuteResponseAnalyser analyser = executeProcess(CEN_LA_SERVICE_ID,
 				parameters);
 
-		return getResult(analyser, "output");
+		return WpsUtils.getMatrixResult(analyser, "output");
 	}
 
 	/**
@@ -481,7 +481,7 @@ public class ConditionalProbabilityWpsClient extends EavlWpsClient {
 	 * @throws IOException
 	 * @throws WPSClientException
 	 */
-	private String hpiKdeJSON(int nGclr3Cols, String gclr3Str,
+	protected String hpiKdeJSON(int nGclr3Cols, String gclr3Str,
 			int nEvalptsCols, String evalptsStr) throws WPSClientException,
 			IOException {
 		HashMap<String, Object> parameters = new HashMap<String, Object>();
@@ -493,10 +493,10 @@ public class ConditionalProbabilityWpsClient extends EavlWpsClient {
 		ExecuteResponseAnalyser analyser = executeProcess(HPI_KDE_SERVICE_ID,
 				parameters);
 
-		return getResultString(analyser, "output");
+		return WpsUtils.getResultString(analyser, "output");
 	}
 
-	private WpsAsyncResult<String> hpiKdeJSONAsync(int nGclr3Cols,
+	protected WpsAsyncResult<String> hpiKdeJSONAsync(int nGclr3Cols,
 			String gclr3Str, int nEvalptsCols, String evalptsStr)
 			throws WPSClientException, IOException {
 		HashMap<String, Object> parameters = new HashMap<String, Object>();

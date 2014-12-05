@@ -49,7 +49,7 @@ public class App {
 			// client.imputationNA(TestData.IMPUTATION_NA_DATA);
 			// print2DArray(res);
 			WpsAsyncResult<String> asyncRes = client.hpiKdeJSONAsync(
-					TestData.HPI_KDE_DATA, TestData.HPI_KDE_DATA);
+					TestDataHpiKde.HPI_KDE_DATA, TestDataHpiKde.HPI_KDE_DATA);
 			String res = asyncRes.get();
 			System.out.println(res);
 			// double[][] res = client.cenLR(TestData.CEN_LE_DATA);
