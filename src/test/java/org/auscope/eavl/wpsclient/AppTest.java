@@ -167,6 +167,16 @@ public class AppTest extends TestCase {
 				TestDataDoubleLogDensity.DOUBLE_LOG_DENSITY_RESULT, 0.000001));
 	}
 
+	public void testDoubleLogDensityAsync() throws WPSClientException,
+			IOException {
+		ConditionalProbabilityWpsClient client = getClient();
+		WpsAsyncResult<double[][]> asyncRes = client.doubleLogDensityAsync(
+				TestDataDoubleLogDensity.DOUBLE_LOG_DENSITY_DATA, 0.437);
+		double[][] res = asyncRes.get();
+		assertTrue(equals(res,
+				TestDataDoubleLogDensity.DOUBLE_LOG_DENSITY_RESULT, 0.000001));
+	}
+
 	public void testQuantileAsync() throws WPSClientException, IOException {
 		ConditionalProbabilityWpsClient client = getClient();
 		WpsAsyncResult<double[]> asyncRes = client.quantileAsync(

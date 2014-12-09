@@ -237,6 +237,23 @@ public class ConditionalProbabilityWpsClient extends EavlWpsClient {
 	 * @throws IOException
 	 * @throws WPSClientException
 	 */
+	public WpsAsyncResult<double[][]> doubleLogDensityAsync(double[][] data, double v)
+			throws WPSClientException, IOException {
+		if (data == null)
+			return null;
+		if (data.length == 0 || data[0].length == 0)
+			return new WpsAsyncEmptyMatrixResult();
+
+		return doubleLogDensityAsync(toWpsInputString(data), v);
+	}
+	/**
+	 * @param data
+	 * @param v
+	 *            threshold
+	 * @return
+	 * @throws IOException
+	 * @throws WPSClientException
+	 */
 	public double[][] doubleLogDensity(Double[][] data, double v)
 			throws WPSClientException, IOException {
 		if (data == null)
@@ -247,6 +264,23 @@ public class ConditionalProbabilityWpsClient extends EavlWpsClient {
 		return doubleLogDensity(toWpsInputString(data), v);
 	}
 
+	/**
+	 * @param data
+	 * @param v
+	 *            threshold
+	 * @return
+	 * @throws IOException
+	 * @throws WPSClientException
+	 */
+	public WpsAsyncResult<double[][]> doubleLogDensityAsync(Double[][] data, double v)
+			throws WPSClientException, IOException {
+		if (data == null)
+			return null;
+		if (data.length == 0 || data[0].length == 0)
+			return new WpsAsyncEmptyMatrixResult();
+
+		return doubleLogDensityAsync(toWpsInputString(data), v);
+	}
 	/**
 	 * @param wpsInputString
 	 * @return
@@ -538,6 +572,24 @@ public class ConditionalProbabilityWpsClient extends EavlWpsClient {
 
 		AsyncExecuteResponseAnalyser analyser = executeProcessAsync(
 				IMPUTATION_NA_SERVICE_ID, parameters);
+
+		return new WpsAsyncMatrixResult(analyser, "output");
+	}
+
+	/**
+	 * @param wpsInputString
+	 * @return
+	 * @throws IOException
+	 * @throws WPSClientException
+	 */
+	protected WpsAsyncResult<double[][]> doubleLogDensityAsync(String dataStr, double v)
+			throws WPSClientException, IOException {
+		HashMap<String, Object> parameters = new HashMap<String, Object>();
+		parameters.put("dataStr", dataStr);
+		parameters.put("v", v);
+
+		AsyncExecuteResponseAnalyser analyser = executeProcessAsync(
+				DOUBLE_LOG_DENSITY_SERVICE_ID, parameters);
 
 		return new WpsAsyncMatrixResult(analyser, "output");
 	}
