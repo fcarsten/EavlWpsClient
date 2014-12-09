@@ -43,12 +43,28 @@ public class ConditionalProbabilityWpsClient extends EavlWpsClient {
 		return imputationNA(data[0].length, toWpsInputString(data));
 	}
 
+	public WpsAsyncResult<double[][]> imputationNAAsync(double[][] data) throws WPSClientException,
+			IOException {
+		if (data.length == 0 || data[0].length == 0)
+			return new WpsAsyncEmptyMatrixResult();
+
+		return imputationNAAsync(data[0].length, toWpsInputString(data));
+	}
+
 	public double[][] imputationNA(Double[][] data) throws WPSClientException,
 			IOException {
 		if (data.length == 0 || data[0].length == 0)
 			return new double[][] {};
 
 		return imputationNA(data[0].length, toWpsInputString(data));
+	}
+
+	public WpsAsyncResult<double[][]> imputationNAAsync(Double[][] data)
+			throws WPSClientException, IOException {
+		if (data.length == 0 || data[0].length == 0)
+			return new WpsAsyncEmptyMatrixResult();
+
+		return imputationNAAsync(data[0].length, toWpsInputString(data));
 	}
 
 	protected double[][] imputationNA(int nCols, String dataStr)
@@ -309,8 +325,8 @@ public class ConditionalProbabilityWpsClient extends EavlWpsClient {
 	 * @throws IOException
 	 * @throws WPSClientException
 	 */
-	public WpsAsyncResult<String> hpiKdeJSONAsync(double[][] gclr3, double[][] evalpts)
-			throws WPSClientException, IOException {
+	public WpsAsyncResult<String> hpiKdeJSONAsync(double[][] gclr3,
+			double[][] evalpts) throws WPSClientException, IOException {
 		if (gclr3.length == 0 || gclr3[0].length == 0)
 			throw new IllegalArgumentException("gclr3 can not be null or empty");
 
@@ -512,4 +528,18 @@ public class ConditionalProbabilityWpsClient extends EavlWpsClient {
 
 		// return getResultString(analyser, "output");
 	}
+
+	protected WpsAsyncResult<double[][]> imputationNAAsync(int nCols,
+			String dataStr) throws WPSClientException, IOException {
+
+		HashMap<String, Object> parameters = new HashMap<String, Object>();
+		parameters.put("nCols", "" + nCols);
+		parameters.put("dataStr", dataStr);
+
+		AsyncExecuteResponseAnalyser analyser = executeProcessAsync(
+				IMPUTATION_NA_SERVICE_ID, parameters);
+
+		return new WpsAsyncMatrixResult(analyser, "output");
+	}
+
 }

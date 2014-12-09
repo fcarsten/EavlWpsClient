@@ -120,6 +120,19 @@ public class AppTest extends TestCase {
 		assertEquals(311.334513274336, res[5][1], 0.000001);
 	}
 
+	public void testImputationNAAsync() throws WPSClientException, IOException {
+		ConditionalProbabilityWpsClient client = getClient();
+		double[][] data = TestDataImputation.IMPUTATION_NA_DATA;
+		// print2DArray(data);
+		data[0][3] = Double.NaN;
+		data[5][1] = Double.NaN;
+		WpsAsyncResult<double[][]> asyncRes = client.imputationNAAsync(data);
+		double[][] res = asyncRes.get();
+		// print2DArray(res);
+		assertEquals(236.329704510109, res[0][3], 0.000001);
+		assertEquals(311.334513274336, res[5][1], 0.000001);
+	}
+
 	public void testHpiKdeAsync() throws WPSClientException, IOException {
 		ConditionalProbabilityWpsClient client = getClient();
 		WpsAsyncResult<String> asyncRes = client.hpiKdeJSONAsync(
