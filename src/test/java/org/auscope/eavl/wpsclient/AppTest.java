@@ -104,18 +104,15 @@ public class AppTest extends TestCase {
 		ConditionalProbabilityWpsClient client = getClient();
 		double[] res = client.quantile(TestDataQuantile.QUANTILE_DATA,
 				TestDataQuantile.QUNATILE_Q);
-		// printVector(res);
 		assertTrue(equals(res, TestDataQuantile.QUANTILE_RESULT, 0.000001));
 	}
 
 	public void testImputationNA() throws WPSClientException, IOException {
 		ConditionalProbabilityWpsClient client = getClient();
 		double[][] data = TestDataImputation.IMPUTATION_NA_DATA;
-		// print2DArray(data);
 		data[0][3] = Double.NaN;
 		data[5][1] = Double.NaN;
 		double[][] res = client.imputationNA(data);
-		// print2DArray(res);
 		assertEquals(236.329704510109, res[0][3], 0.000001);
 		assertEquals(311.334513274336, res[5][1], 0.000001);
 	}
@@ -123,12 +120,10 @@ public class AppTest extends TestCase {
 	public void testImputationNAAsync() throws WPSClientException, IOException {
 		ConditionalProbabilityWpsClient client = getClient();
 		double[][] data = TestDataImputation.IMPUTATION_NA_DATA;
-		// print2DArray(data);
 		data[0][3] = Double.NaN;
 		data[5][1] = Double.NaN;
 		WpsAsyncResult<double[][]> asyncRes = client.imputationNAAsync(data);
 		double[][] res = asyncRes.get();
-		// print2DArray(res);
 		assertEquals(236.329704510109, res[0][3], 0.000001);
 		assertEquals(311.334513274336, res[5][1], 0.000001);
 	}
@@ -139,7 +134,13 @@ public class AppTest extends TestCase {
 				TestDataHpiKde.HPI_KDE_DATA, TestDataHpiKde.HPI_KDE_DATA);
 		String resStr = asyncRes.get();
 		assertNotNull(resStr);
-		// System.out.println(resStr);
+	}
+
+	public void testHpiKde() throws WPSClientException, IOException {
+		ConditionalProbabilityWpsClient client = getClient();
+		String res = client.hpiKdeJSON(
+				TestDataHpiKde.HPI_KDE_DATA, TestDataHpiKde.HPI_KDE_DATA);
+		assertNotNull(res);
 	}
 
 	public void testLogDensity() throws WPSClientException, IOException {
@@ -149,20 +150,38 @@ public class AppTest extends TestCase {
 		assertTrue(equals(res, TestDataLogDensity.LOG_DENSITY_RESULT, 0.000001));
 	}
 
+	public void testLogDensityAsync() throws WPSClientException, IOException {
+		ConditionalProbabilityWpsClient client = getClient();
+		WpsAsyncResult<double[][]> asyncRes = client
+				.logDensityAsync(TestDataLogDensity.LOG_DENSITY_DATA);
+		double[][] res = asyncRes.get();
+		// print2DArray(res);
+		assertTrue(equals(res, TestDataLogDensity.LOG_DENSITY_RESULT, 0.000001));
+	}
+
+	public void testMeanAcfAsync() throws WPSClientException, IOException {
+		ConditionalProbabilityWpsClient client = getClient();
+		WpsAsyncResult<ACF> res = client
+				.meanACFAsync(TestDataMeanAcf.MEAN_ACF_DATA);
+
+		ACF resMeanACF = res.get();
+		assertTrue(equals(resMeanACF.getAcf(), TestDataMeanAcf.MEAN_ACF_RESULT,
+				0.000001));
+		assertEquals(0.122866775326781, resMeanACF.getCi(), 0.000001);
+	}
+
 	public void testMeanAcf() throws WPSClientException, IOException {
 		ConditionalProbabilityWpsClient client = getClient();
 		ACF resMeanACF = client.meanACF(TestDataMeanAcf.MEAN_ACF_DATA);
 		assertTrue(equals(resMeanACF.getAcf(), TestDataMeanAcf.MEAN_ACF_RESULT,
 				0.000001));
 		assertEquals(0.122866775326781, resMeanACF.getCi(), 0.000001);
-		// System.out.println(resMeanACF);
 	}
 
 	public void testDoubleLogDensity() throws WPSClientException, IOException {
 		ConditionalProbabilityWpsClient client = getClient();
 		double[][] res = client.doubleLogDensity(
 				TestDataDoubleLogDensity.DOUBLE_LOG_DENSITY_DATA, 0.437);
-		// print2DArray(res);
 		assertTrue(equals(res,
 				TestDataDoubleLogDensity.DOUBLE_LOG_DENSITY_RESULT, 0.000001));
 	}
@@ -185,8 +204,17 @@ public class AppTest extends TestCase {
 		assertTrue(equals(res, TestDataQuantile.QUANTILE_RESULT, 0.000001));
 	}
 
-	public void testCenLR() {
-		// TODO
+	public void testCenLRAsync() throws WPSClientException, IOException{
+		ConditionalProbabilityWpsClient client = getClient();
+		WpsAsyncResult<double[][]> asyncRes = client.cenLRAsync(TestDataCenLR.CEN_LR_DATA);
+		double[][] res = asyncRes.get();
+		assertTrue(equals(res, TestDataCenLR.CEN_LR_RES, 0.000001));
+	}
+
+	public void testCenLR() throws WPSClientException, IOException{
+		ConditionalProbabilityWpsClient client = getClient();
+		double[][] res = client.cenLR(TestDataCenLR.CEN_LR_DATA);
+		assertTrue(equals(res, TestDataCenLR.CEN_LR_RES, 0.000001));
 	}
 
 }

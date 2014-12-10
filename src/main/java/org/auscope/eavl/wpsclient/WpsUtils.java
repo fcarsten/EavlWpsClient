@@ -106,6 +106,10 @@ public class WpsUtils {
 			for (String val : vals) {
 				if (val.equals("NA")) {
 					result[r][c] = Double.NaN;
+				} else if(val.equals("Inf")) {
+					result[r][c] = Double.POSITIVE_INFINITY;
+				} else if(val.equals("-Inf")) {
+					result[r][c] = Double.NEGATIVE_INFINITY;
 				} else {
 					result[r][c] = Double.parseDouble(val.trim());
 				}

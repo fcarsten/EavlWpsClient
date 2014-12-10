@@ -18,13 +18,16 @@ public class WpsAsyncResultImpl<T> implements WpsAsyncResult<T> {
 
 	private AsyncResultRetriever<T> asyncResultRetriever;
 
+	private AsyncExecuteResponseAnalyser analyser;
+
 	public WpsAsyncResultImpl(AsyncExecuteResponseAnalyser analyser,
 			AsyncResultRetriever<T> asyncResultRetriever) {
+		this.analyser=analyser;
 		this.asyncResultRetriever = asyncResultRetriever;
 	}
 
 	public T get() throws FileNotFoundException, WPSClientException {
-		return asyncResultRetriever.retrieve();
+		return asyncResultRetriever.retrieve(analyser);
 	}
 
 

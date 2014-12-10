@@ -12,5 +12,5 @@ import org.n52.wps.client.WPSClientException;
  *
  */
 public interface AsyncResultRetriever<T> {
-	T retrieve() throws FileNotFoundException, WPSClientException;
+	T retrieve(AsyncExecuteResponseAnalyser analyser) throws FileNotFoundException, WPSClientException;
 }

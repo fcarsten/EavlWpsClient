@@ -12,10 +12,10 @@ import org.n52.wps.client.WPSClientException;
  *
  */
 public class WpsAsyncVectorResult extends WpsAsyncResultImpl<double[]> {
-	public WpsAsyncVectorResult(final AsyncExecuteResponseAnalyser analyser, String string) {
+	public WpsAsyncVectorResult(AsyncExecuteResponseAnalyser analyser, String string) {
 		super(analyser,
 				new AsyncResultRetriever<double[]>() {
-					public double[] retrieve() throws FileNotFoundException,
+					public double[] retrieve(AsyncExecuteResponseAnalyser analyser) throws FileNotFoundException,
 							WPSClientException {
 						return WpsUtils.getVectorResult(analyser.get(), "output");
 					}

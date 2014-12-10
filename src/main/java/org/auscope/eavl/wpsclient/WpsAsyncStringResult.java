@@ -18,10 +18,10 @@ public class WpsAsyncStringResult extends WpsAsyncResultImpl<String> {
 	 *
 	 * @see org.auscope.eavl.wpsclient.WpsAsyncResult#get()
 	 */
-	public WpsAsyncStringResult(final AsyncExecuteResponseAnalyser analyser,
+	public WpsAsyncStringResult( AsyncExecuteResponseAnalyser analyser,
 			String string) {
 		super(analyser, new AsyncResultRetriever<String>() {
-			public String retrieve() throws FileNotFoundException,
+			public String retrieve(AsyncExecuteResponseAnalyser analyser) throws FileNotFoundException,
 					WPSClientException {
 				return WpsUtils.getResultString(analyser.get(), "output");
 			}

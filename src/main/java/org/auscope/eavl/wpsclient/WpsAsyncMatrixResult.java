@@ -13,10 +13,10 @@ import org.n52.wps.client.WPSClientException;
  */
 public class WpsAsyncMatrixResult extends WpsAsyncResultImpl<double[][]> {
 
-	public WpsAsyncMatrixResult(final AsyncExecuteResponseAnalyser analyser,
+	public WpsAsyncMatrixResult(AsyncExecuteResponseAnalyser analyser,
 			String string) {
 		super(analyser, new AsyncResultRetriever<double[][]>() {
-			public double[][] retrieve() throws FileNotFoundException,
+			public double[][] retrieve(AsyncExecuteResponseAnalyser analyser) throws FileNotFoundException,
 					WPSClientException {
 				return WpsUtils.getMatrixResult(analyser.get(), "output");
 			}
