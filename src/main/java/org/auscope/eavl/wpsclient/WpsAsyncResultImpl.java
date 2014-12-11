@@ -20,6 +20,31 @@ public class WpsAsyncResultImpl<T> implements WpsAsyncResult<T> {
 
 	private AsyncExecuteResponseAnalyser analyser;
 
+	/**
+	 * @return
+	 * @see org.auscope.eavl.wpsclient.AsyncExecuteResponseAnalyser#getPercentComplete()
+	 */
+	public int getPercentComplete() {
+		return analyser.getPercentComplete();
+	}
+
+	/**
+	 * @return
+	 * @see org.auscope.eavl.wpsclient.AsyncExecuteResponseAnalyser#hasFinished()
+	 */
+	public boolean hasFinished() {
+		return analyser.hasFinished();
+	}
+
+	/**
+	 * @return
+	 * @throws WPSClientException
+	 * @see org.auscope.eavl.wpsclient.AsyncExecuteResponseAnalyser#updateStatus()
+	 */
+	public boolean updateStatus() throws WPSClientException {
+		return analyser.updateStatus();
+	}
+
 	public WpsAsyncResultImpl(AsyncExecuteResponseAnalyser analyser,
 			AsyncResultRetriever<T> asyncResultRetriever) {
 		this.analyser=analyser;

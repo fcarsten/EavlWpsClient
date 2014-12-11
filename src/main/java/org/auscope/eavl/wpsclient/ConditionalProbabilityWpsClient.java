@@ -47,7 +47,7 @@ public class ConditionalProbabilityWpsClient extends EavlWpsClient {
 	public WpsAsyncResult<double[][]> imputationNAAsync(double[][] data)
 			throws WPSClientException, IOException {
 		if (data.length == 0 || data[0].length == 0)
-			return new WpsAsyncEmptyMatrixResult();
+			return WpsAsyncStaticResult.EMPTY_MATRIX_RESULT;
 
 		return imputationNAAsync(data[0].length, toWpsInputString(data));
 	}
@@ -63,7 +63,7 @@ public class ConditionalProbabilityWpsClient extends EavlWpsClient {
 	public WpsAsyncResult<double[][]> imputationNAAsync(Double[][] data)
 			throws WPSClientException, IOException {
 		if (data.length == 0 || data[0].length == 0)
-			return new WpsAsyncEmptyMatrixResult();
+			return WpsAsyncStaticResult.EMPTY_MATRIX_RESULT;
 
 		return imputationNAAsync(data[0].length, toWpsInputString(data));
 	}
@@ -110,7 +110,7 @@ public class ConditionalProbabilityWpsClient extends EavlWpsClient {
 		if (data == null)
 			return null;
 		if (data.length == 0)
-			return new WpsAsyncEmptyMatrixResult();
+			return WpsAsyncStaticResult.EMPTY_MATRIX_RESULT;
 
 		return logDensityAsync(toWpsInputString(data));
 	}
@@ -130,7 +130,7 @@ public class ConditionalProbabilityWpsClient extends EavlWpsClient {
 		if (data == null || q == null)
 			return null;
 		if (data.length == 0 || q.length == 0)
-			return new WpsAsyncEmptyVectorResult();
+			return WpsAsyncStaticResult.EMPTY_VECTOR_RESULT;
 
 		return quantileAsync(toWpsInputString(data), toWpsInputString(q));
 	}
@@ -164,7 +164,7 @@ public class ConditionalProbabilityWpsClient extends EavlWpsClient {
 		if (data == null)
 			return null;
 		if (data.length == 0)
-			return new WpsAsyncEmptyMatrixResult();
+			return WpsAsyncStaticResult.EMPTY_MATRIX_RESULT;
 
 		return logDensityAsync(toWpsInputString(data));
 	}
@@ -257,14 +257,10 @@ public class ConditionalProbabilityWpsClient extends EavlWpsClient {
 		if (data == null)
 			return null;
 		if (data.length == 0) {
-			return new WpsAsyncResult<ACF>() {
-
-				public ACF get() throws FileNotFoundException,
-						WPSClientException {
-					return new ACF(new double[0], Double.NaN);
-				}
-			};
+			return new WpsAsyncStaticResult<ACF>(new ACF(new double[0],
+					Double.NaN));
 		}
+
 		HashMap<String, Object> parameters = new HashMap<String, Object>();
 		String dataStr = toWpsInputString(data);
 		parameters.put("dataStr", dataStr);
@@ -329,7 +325,7 @@ public class ConditionalProbabilityWpsClient extends EavlWpsClient {
 		if (data == null)
 			return null;
 		if (data.length == 0 || data[0].length == 0)
-			return new WpsAsyncEmptyMatrixResult();
+			return WpsAsyncStaticResult.EMPTY_MATRIX_RESULT;
 
 		return doubleLogDensityAsync(toWpsInputString(data), v);
 	}
@@ -365,7 +361,7 @@ public class ConditionalProbabilityWpsClient extends EavlWpsClient {
 		if (data == null)
 			return null;
 		if (data.length == 0 || data[0].length == 0)
-			return new WpsAsyncEmptyMatrixResult();
+			return WpsAsyncStaticResult.EMPTY_MATRIX_RESULT;
 
 		return doubleLogDensityAsync(toWpsInputString(data), v);
 	}
@@ -408,13 +404,14 @@ public class ConditionalProbabilityWpsClient extends EavlWpsClient {
 	 * @throws IOException
 	 * @throws WPSClientException
 	 */
-	public WpsAsyncResult<double[][]> cenLRAsync(double[][] data) throws WPSClientException,
-			IOException {
+	public WpsAsyncResult<double[][]> cenLRAsync(double[][] data)
+			throws WPSClientException, IOException {
 		if (data.length == 0 || data[0].length == 0)
-			return new WpsAsyncEmptyMatrixResult();
+			return WpsAsyncStaticResult.EMPTY_MATRIX_RESULT;
 
 		return cenLRAsync(data[0].length, toWpsInputString(data));
 	}
+
 	/**
 	 * @param length
 	 * @param wpsInputString
