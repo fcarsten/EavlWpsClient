@@ -399,6 +399,20 @@ public class ConditionalProbabilityWpsClient extends EavlWpsClient {
 	}
 
 	/**
+     * @param cenLeData
+     * @return
+     * @throws IOException
+     * @throws WPSClientException
+     */
+    public double[][] cenLR(Double[][] data) throws WPSClientException,
+            IOException {
+        if (data.length == 0 || data[0].length == 0)
+            return new double[0][];
+
+        return cenLR(data[0].length, toWpsInputString(data));
+    }
+
+	/**
 	 * @param cenLeData
 	 * @return
 	 * @throws IOException
