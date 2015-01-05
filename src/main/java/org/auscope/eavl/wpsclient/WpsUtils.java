@@ -89,6 +89,12 @@ public class WpsUtils {
 		return parseWpsMatrixOutput(resultStr);
 	}
 
+    public static Double[][] getMatrixResultDouble(ExecuteResponseAnalyser analyser,
+            String outputParameterName) throws WPSClientException,
+            FileNotFoundException {
+        String resultStr = WpsUtils.getResultString(analyser, outputParameterName);
+        return parseWpsMatrixOutputDouble(resultStr);
+    }
 	/**
 	 * @param resultStr
 	 * @return
@@ -121,5 +127,38 @@ public class WpsUtils {
 
 		return result;
 	}
+
+	   /**
+     * @param resultStr
+     * @return
+     */
+    public static Double[][] parseWpsMatrixOutputDouble(String resultStr) {
+        Double[][] result = null;
+
+        String[] rows = resultStr.split("[\n\r]+");
+        result = new Double[rows.length][];
+        int r = 0;
+        for (String row : rows) {
+            String[] vals = row.split(",");
+            result[r] = new Double[vals.length];
+            int c = 0;
+            for (String val : vals) {
+                if (val.equals("NA")) {
+                    result[r][c] = Double.NaN;
+                } else if(val.equals("Inf")) {
+                    result[r][c] = Double.POSITIVE_INFINITY;
+                } else if(val.equals("-Inf")) {
+                    result[r][c] = Double.NEGATIVE_INFINITY;
+                } else {
+                    result[r][c] = Double.parseDouble(val.trim());
+                }
+                c++;
+            }
+            c = 0;
+            r++;
+        }
+
+        return result;
+    }
 
 }

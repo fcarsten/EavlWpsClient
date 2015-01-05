@@ -3,13 +3,14 @@
  */
 package org.auscope.eavl.wpsclient;
 
+import java.io.Serializable;
 import java.util.*;
 
 /**
  * @author fri096
  *
  */
-public class ACF {
+public class ACF implements Serializable {
 
     private double[] acf;
     private double ci;

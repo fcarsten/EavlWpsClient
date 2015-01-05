@@ -4,6 +4,7 @@
 package org.auscope.eavl.wpsclient;
 
 import java.io.FileNotFoundException;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -398,6 +399,20 @@ public class ConditionalProbabilityWpsClient extends EavlWpsClient {
 		return cenLR(data[0].length, toWpsInputString(data));
 	}
 
+    /**
+     * @param cenLeData
+     * @return
+     * @throws IOException
+     * @throws WPSClientException
+     */
+    public Double[][] cenLR(Double[][] data) throws WPSClientException,
+            IOException {
+        if (data.length == 0 || data[0].length == 0)
+            return new Double[0][0];
+
+        return cenLRDouble(data[0].length, toWpsInputString(data));
+    }
+
 	/**
 	 * @param cenLeData
 	 * @return
@@ -431,6 +446,24 @@ public class ConditionalProbabilityWpsClient extends EavlWpsClient {
 		return WpsUtils.getMatrixResult(analyser, "output");
 	}
 
+    /**
+     * @param length
+     * @param wpsInputString
+     * @return
+     * @throws IOException
+     * @throws WPSClientException
+     */
+    protected Double[][] cenLRDouble(int nCols, String dataStr)
+            throws WPSClientException, IOException {
+        HashMap<String, Object> parameters = new HashMap<String, Object>();
+        parameters.put("nCols", "" + nCols);
+        parameters.put("dataStr", dataStr);
+
+        ExecuteResponseAnalyser analyser = executeProcess(CEN_LA_SERVICE_ID,
+                parameters);
+
+        return WpsUtils.getMatrixResultDouble(analyser, "output");
+    }
 	/**
 	 * @param length
 	 * @param wpsInputString
@@ -655,6 +688,13 @@ public class ConditionalProbabilityWpsClient extends EavlWpsClient {
 		HashMap<String, Object> parameters = new HashMap<String, Object>();
 		parameters.put("nGclr3Cols", "" + nGclr3Cols);
 		parameters.put("gclr3Str", gclr3Str);
+		FileWriter f = new FileWriter("gclr3Str.txt");
+		f.write(gclr3Str);
+		f.close();
+		f = new FileWriter("eps.txt");
+        f.write(evalptsStr);
+        f.close();
+
 		parameters.put("nEvalptsCols", "" + nEvalptsCols);
 		parameters.put("eps", evalptsStr);
 
