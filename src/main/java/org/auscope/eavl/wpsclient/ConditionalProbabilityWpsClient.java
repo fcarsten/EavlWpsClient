@@ -53,22 +53,6 @@ public class ConditionalProbabilityWpsClient extends EavlWpsClient {
 		return imputationNAAsync(data[0].length, toWpsInputString(data));
 	}
 
-	public double[][] imputationNA(Double[][] data) throws WPSClientException,
-			IOException {
-		if (data.length == 0 || data[0].length == 0)
-			return new double[][] {};
-
-		return imputationNA(data[0].length, toWpsInputString(data));
-	}
-
-	public WpsAsyncResult<double[][]> imputationNAAsync(Double[][] data)
-			throws WPSClientException, IOException {
-		if (data.length == 0 || data[0].length == 0)
-			return WpsAsyncStaticResult.EMPTY_MATRIX_RESULT;
-
-		return imputationNAAsync(data[0].length, toWpsInputString(data));
-	}
-
 	protected double[][] imputationNA(int nCols, String dataStr)
 			throws WPSClientException, IOException {
 
@@ -134,40 +118,6 @@ public class ConditionalProbabilityWpsClient extends EavlWpsClient {
 			return WpsAsyncStaticResult.EMPTY_VECTOR_RESULT;
 
 		return quantileAsync(toWpsInputString(data), toWpsInputString(q));
-	}
-
-	/**
-	 * @param data
-	 *            Array of values (nulls encoded as Double.NaN)
-	 * @return
-	 * @throws WPSClientException
-	 * @throws IOException
-	 */
-	public double[][] logDensity(Double[] data) throws WPSClientException,
-			IOException {
-		if (data == null)
-			return null;
-		if (data.length == 0)
-			return new double[0][0];
-
-		return logDensity(toWpsInputString(data));
-	}
-
-	/**
-	 * @param data
-	 *            Array of values (nulls encoded as Double.NaN)
-	 * @return
-	 * @throws WPSClientException
-	 * @throws IOException
-	 */
-	public WpsAsyncResult<double[][]> logDensityAsync(Double[] data)
-			throws WPSClientException, IOException {
-		if (data == null)
-			return null;
-		if (data.length == 0)
-			return WpsAsyncStaticResult.EMPTY_MATRIX_RESULT;
-
-		return logDensityAsync(toWpsInputString(data));
 	}
 
 	/**
@@ -332,42 +282,6 @@ public class ConditionalProbabilityWpsClient extends EavlWpsClient {
 	}
 
 	/**
-	 * @param data
-	 * @param v
-	 *            threshold
-	 * @return
-	 * @throws IOException
-	 * @throws WPSClientException
-	 */
-	public double[][] doubleLogDensity(Double[][] data, double v)
-			throws WPSClientException, IOException {
-		if (data == null)
-			return null;
-		if (data.length == 0 || data[0].length == 0)
-			return new double[0][0];
-
-		return doubleLogDensity(toWpsInputString(data), v);
-	}
-
-	/**
-	 * @param data
-	 * @param v
-	 *            threshold
-	 * @return
-	 * @throws IOException
-	 * @throws WPSClientException
-	 */
-	public WpsAsyncResult<double[][]> doubleLogDensityAsync(Double[][] data,
-			double v) throws WPSClientException, IOException {
-		if (data == null)
-			return null;
-		if (data.length == 0 || data[0].length == 0)
-			return WpsAsyncStaticResult.EMPTY_MATRIX_RESULT;
-
-		return doubleLogDensityAsync(toWpsInputString(data), v);
-	}
-
-	/**
 	 * @param wpsInputString
 	 * @return
 	 * @throws IOException
@@ -398,34 +312,6 @@ public class ConditionalProbabilityWpsClient extends EavlWpsClient {
 
 		return cenLR(data[0].length, toWpsInputString(data));
 	}
-
-    /**
-     * @param cenLeData
-     * @return
-     * @throws IOException
-     * @throws WPSClientException
-     */
-    public Double[][] cenLR(Double[][] data) throws WPSClientException,
-            IOException {
-        if (data.length == 0 || data[0].length == 0)
-            return new Double[0][0];
-
-        return cenLRDouble(data[0].length, toWpsInputString(data));
-    }
-
-	/**
-     * @param cenLeData
-     * @return
-     * @throws IOException
-     * @throws WPSClientException
-     */
-    public double[][] cenLR(Double[][] data) throws WPSClientException,
-            IOException {
-        if (data.length == 0 || data[0].length == 0)
-            return new double[0][];
-
-        return cenLR(data[0].length, toWpsInputString(data));
-    }
 
 	/**
 	 * @param cenLeData
@@ -460,24 +346,6 @@ public class ConditionalProbabilityWpsClient extends EavlWpsClient {
 		return WpsUtils.getMatrixResult(analyser, "output");
 	}
 
-    /**
-     * @param length
-     * @param wpsInputString
-     * @return
-     * @throws IOException
-     * @throws WPSClientException
-     */
-    protected Double[][] cenLRDouble(int nCols, String dataStr)
-            throws WPSClientException, IOException {
-        HashMap<String, Object> parameters = new HashMap<String, Object>();
-        parameters.put("nCols", "" + nCols);
-        parameters.put("dataStr", dataStr);
-
-        ExecuteResponseAnalyser analyser = executeProcess(CEN_LA_SERVICE_ID,
-                parameters);
-
-        return WpsUtils.getMatrixResultDouble(analyser, "output");
-    }
 	/**
 	 * @param length
 	 * @param wpsInputString
@@ -619,49 +487,6 @@ public class ConditionalProbabilityWpsClient extends EavlWpsClient {
 			res[i] = (gHikde[i] * priorProb) / gkde[i];
 		}
 		return res;
-	}
-
-	/**
-	 * @param hpiKdeData
-	 * @param hpiKdeData2
-	 * @return
-	 * @throws IOException
-	 * @throws WPSClientException
-	 */
-	public String hpiKdeJSON(Double[][] gclr3, Double[][] evalpts)
-			throws WPSClientException, IOException {
-		if (gclr3.length == 0 || gclr3[0].length == 0)
-			throw new IllegalArgumentException("gclr3 can not be null or empty");
-
-		if (evalpts.length == 0 || evalpts[0].length == 0)
-			throw new IllegalArgumentException(
-					"evalpts can not be null or empty");
-
-		return hpiKdeJSON(gclr3[0].length, toWpsInputString(gclr3),
-				evalpts[0].length, toWpsInputString(evalpts));
-	}
-
-	public String hpiKdeJSON(Double[][] proxies, Double[] cutoffCol,
-			double cutoffValue) throws WPSClientException, IOException {
-		if (proxies.length == 0 || proxies[0].length == 0)
-			throw new IllegalArgumentException(
-					"proxies can not be null or empty");
-
-		if (cutoffCol.length != proxies.length)
-			throw new IllegalArgumentException(
-					"cutoffCol has to be same size as proxies");
-
-		ArrayList<Double[]> gclr3List = new ArrayList<Double[]>();
-
-		for (int i = 0; i < cutoffCol.length; i++) {
-			if (cutoffCol[i] > cutoffValue) {
-				gclr3List.add(proxies[i]);
-			}
-		}
-		return hpiKdeJSON(
-				gclr3List
-						.toArray(new Double[gclr3List.size()][proxies[0].length]),
-				proxies);
 	}
 
 	public String hpiKdeJSON(double[][] proxies, double[] cutoffCol,
