@@ -1,0 +1,181 @@
+/**
+ *
+ */
+package org.auscope.eavl.wpsclient.dput;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import org.antlr.v4.runtime.tree.ParseTree;
+import org.auscope.eavl.wpsclient.dput.DputParser.BoolContext;
+import org.auscope.eavl.wpsclient.dput.DputParser.BoolVectorContext;
+import org.auscope.eavl.wpsclient.dput.DputParser.ExpressionListContext;
+import org.auscope.eavl.wpsclient.dput.DputParser.ListContext;
+import org.auscope.eavl.wpsclient.dput.DputParser.NameValuePairContext;
+import org.auscope.eavl.wpsclient.dput.DputParser.NumberContext;
+import org.auscope.eavl.wpsclient.dput.DputParser.NumberVectorContext;
+import org.auscope.eavl.wpsclient.dput.DputParser.StrContext;
+import org.auscope.eavl.wpsclient.dput.DputParser.StrVectorContext;
+import org.auscope.eavl.wpsclient.dput.DputParser.StructureContext;
+import org.auscope.eavl.wpsclient.dput.DputParser.VariableNameContext;
+
+/**
+ * @author fri096
+ *
+ */
+public class DputParserVisitor extends DputBaseVisitor<Dput> {
+
+    /* (non-Javadoc)
+     * @see org.auscope.eavl.wpsclient.dput.DputBaseVisitor#visitNumberVector(org.auscope.eavl.wpsclient.dput.DputParser.NumberVectorContext)
+     */
+    @Override
+    public Dput visitNumberVector(NumberVectorContext ctx) {
+
+        ArrayList<Double> res = new ArrayList<>();
+
+        int n = ctx.getChildCount();
+        for (int i=0; i<n; i++) {
+            ParseTree c = ctx.getChild(i);
+            DputNumber childResult = (DputNumber) c.accept(this);
+            if(childResult!=null)
+                res.add(childResult.getValue());
+        }
+
+        return new DputDoubleVector(res);
+    }
+
+    /* (non-Javadoc)
+     * @see org.auscope.eavl.wpsclient.dput.DputBaseVisitor#visitBoolVector(org.auscope.eavl.wpsclient.dput.DputParser.BoolVectorContext)
+     */
+    @Override
+    public Dput visitBoolVector(BoolVectorContext ctx) {
+
+        ArrayList<Boolean> res = new ArrayList<>();
+
+        int n = ctx.getChildCount();
+        for (int i=0; i<n; i++) {
+            ParseTree c = ctx.getChild(i);
+            DputBool childResult = (DputBool) c.accept(this);
+            if(childResult!=null)
+                res.add(childResult.isValue());
+        }
+
+        return new DputBooleanVector(res);
+    }
+
+    /* (non-Javadoc)
+     * @see org.auscope.eavl.wpsclient.dput.DputBaseVisitor#visitStrVector(org.auscope.eavl.wpsclient.dput.DputParser.StrVectorContext)
+     */
+    @Override
+    public Dput visitStrVector(StrVectorContext ctx) {
+
+        ArrayList<String> res = new ArrayList<>();
+
+        int n = ctx.getChildCount();
+        for (int i=0; i<n; i++) {
+            ParseTree c = ctx.getChild(i);
+            DputString childResult = (DputString) c.accept(this);
+            if(childResult!=null)
+                res.add(childResult.getValue());
+        }
+
+        return new DputStringVector(res);
+    }
+
+    /* (non-Javadoc)
+     * @see org.auscope.eavl.wpsclient.dput.DputBaseVisitor#visitBool(org.auscope.eavl.wpsclient.dput.DputParser.BoolContext)
+     */
+    @Override
+    public Dput visitBool(BoolContext ctx) {
+        return new DputBool(ctx.getText());
+    }
+
+    /* (non-Javadoc)
+     * @see org.auscope.eavl.wpsclient.dput.DputBaseVisitor#visitStr(org.auscope.eavl.wpsclient.dput.DputParser.StrContext)
+     */
+    @Override
+    public Dput visitStr(StrContext ctx) {
+        return new DputString(ctx.getText());
+    }
+
+    /* (non-Javadoc)
+     * @see org.auscope.eavl.wpsclient.dput.DputBaseVisitor#visitExpressionList(org.auscope.eavl.wpsclient.dput.DputParser.ExpressionListContext)
+     */
+    @Override
+    public Dput visitExpressionList(ExpressionListContext ctx) {
+        List<Dput> res = new ArrayList<>();
+
+        int n = ctx.getChildCount();
+        for (int i=0; i<n; i++) {
+            ParseTree c = ctx.getChild(i);
+            Dput childResult = c.accept(this);
+            if(childResult!=null)
+                res.add(childResult);
+        }
+
+        return new DputList(res);
+    }
+
+    @Override
+    public Dput visitNumber(NumberContext ctx) {
+        return new DputNumber(ctx.getText());
+    }
+
+    @Override
+    public Dput visitNameValuePair(NameValuePairContext ctx) {
+        if(ctx.name==null) return null;
+
+        return new DputNameValuePair(this.visit(ctx.name), this.visit(ctx.getChild(2)));
+    }
+
+    @Override
+    public Dput visitVariableName(VariableNameContext ctx) {
+        return new DputString(ctx.getText());
+    }
+
+//    @Override
+//    public Dput visitVector(VectorContext ctx) {
+//        List<Dput> res = new ArrayList<>();
+//
+//        int n = ctx.getChildCount();
+//        for (int i=0; i<n; i++) {
+//            ParseTree c = ctx.getChild(i);
+//            Dput childResult = c.accept(this);
+//            if(childResult!=null)
+//                res.add(childResult);
+//        }
+//
+//        return new DputList(res);
+//    }
+
+    @Override
+    public Dput visitList(ListContext ctx) {
+        List<Dput> res = new ArrayList<>();
+
+        int n = ctx.getChildCount();
+        for (int i=0; i<n; i++) {
+            ParseTree c = ctx.getChild(i);
+            Dput childResult = c.accept(this);
+            if(childResult!=null)
+                res.add(childResult);
+        }
+
+        return new DputList(res);
+    }
+
+    @Override
+    public Dput visitStructure(StructureContext ctx) {
+        List<Dput> res = new ArrayList<>();
+
+        int n = ctx.getChildCount();
+        for (int i=0; i<n; i++) {
+            ParseTree c = ctx.getChild(i);
+            Dput childResult = c.accept(this);
+            if(childResult!=null)
+                res.add(childResult);
+        }
+
+        return new DputList(res);
+    }
+
+}
