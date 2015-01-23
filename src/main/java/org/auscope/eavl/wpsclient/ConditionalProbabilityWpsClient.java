@@ -499,7 +499,7 @@ public class ConditionalProbabilityWpsClient extends EavlWpsClient {
         return res;
     }
 
-    public String hpiKdeJSON(double[][] proxies, double[] cutoffCol,
+    public HpiKdeJSON hpiKdeJSON(double[][] proxies, double[] cutoffCol,
             double cutoffValue) throws WPSClientException, IOException {
         if (proxies.length == 0 || proxies[0].length == 0)
             throw new IllegalArgumentException(
@@ -516,10 +516,11 @@ public class ConditionalProbabilityWpsClient extends EavlWpsClient {
                 gclr3List.add(proxies[i]);
             }
         }
-        return hpiKdeJSON(
+        String str = hpiKdeJSON(
                 gclr3List
                         .toArray(new double[gclr3List.size()][proxies[0].length]),
                 proxies);
+        return new HpiKdeJSON(str, gclr3List.size(), cutoffCol.length);
     }
 
     /**
