@@ -7,16 +7,18 @@ import java.util.ArrayList;
 
 import org.antlr.v4.runtime.tree.ParseTree;
 import org.auscope.eavl.wpsclient.dput.DputParser.BoolContext;
+import org.auscope.eavl.wpsclient.dput.DputParser.BoolMatrixContext;
 import org.auscope.eavl.wpsclient.dput.DputParser.BoolVectorContext;
 import org.auscope.eavl.wpsclient.dput.DputParser.ListContext;
 import org.auscope.eavl.wpsclient.dput.DputParser.ListStructureContext;
 import org.auscope.eavl.wpsclient.dput.DputParser.NameValuePairContext;
 import org.auscope.eavl.wpsclient.dput.DputParser.NumberContext;
+import org.auscope.eavl.wpsclient.dput.DputParser.NumberMatrixContext;
 import org.auscope.eavl.wpsclient.dput.DputParser.NumberVectorContext;
 import org.auscope.eavl.wpsclient.dput.DputParser.StrContext;
 import org.auscope.eavl.wpsclient.dput.DputParser.StrVectorContext;
+import org.auscope.eavl.wpsclient.dput.DputParser.StringMatrixContext;
 import org.auscope.eavl.wpsclient.dput.DputParser.VariableNameContext;
-import org.auscope.eavl.wpsclient.dput.DputParser.VectorStructureContext;
 
 /**
  * @author fri096
@@ -45,16 +47,49 @@ public class DputParserVisitor extends DputBaseVisitor<Dput> {
         return res;
     }
 
-    /*
-     * (non-Javadoc)
-     *
-     * @see
-     * org.auscope.eavl.wpsclient.dput.DputBaseVisitor#visitVectorStructure(
-     * org.auscope.eavl.wpsclient.dput.DputParser.VectorStructureContext)
+    /* (non-Javadoc)
+     * @see org.auscope.eavl.wpsclient.dput.DputBaseVisitor#visitNumberMatrix(org.auscope.eavl.wpsclient.dput.DputParser.NumberMatrixContext)
      */
     @Override
-    public Dput visitVectorStructure(VectorStructureContext ctx) {
-        DputVectorStructure res = new DputVectorStructure();
+    public Dput visitNumberMatrix(NumberMatrixContext ctx) {
+
+        DputNumberMatrix res = new DputNumberMatrix();
+
+        int n = ctx.getChildCount();
+        for (int i = 0; i < n; i++) {
+            ParseTree c = ctx.getChild(i);
+            Dput childResult = c.accept(this);
+            if (childResult != null)
+                res.add(childResult);
+        }
+
+        return res;
+        }
+
+    /* (non-Javadoc)
+     * @see org.auscope.eavl.wpsclient.dput.DputBaseVisitor#visitBoolMatrix(org.auscope.eavl.wpsclient.dput.DputParser.BoolMatrixContext)
+     */
+    @Override
+    public Dput visitBoolMatrix(BoolMatrixContext ctx) {
+        DputBoolMatrix res = new DputBoolMatrix();
+
+        int n = ctx.getChildCount();
+        for (int i = 0; i < n; i++) {
+            ParseTree c = ctx.getChild(i);
+            Dput childResult = c.accept(this);
+            if (childResult != null)
+                res.add(childResult);
+        }
+
+        return res;
+    }
+
+    /* (non-Javadoc)
+     * @see org.auscope.eavl.wpsclient.dput.DputBaseVisitor#visitStringMatrix(org.auscope.eavl.wpsclient.dput.DputParser.StringMatrixContext)
+     */
+    @Override
+    public Dput visitStringMatrix(StringMatrixContext ctx) {
+        DputStringMatrix res = new DputStringMatrix();
 
         int n = ctx.getChildCount();
         for (int i = 0; i < n; i++) {

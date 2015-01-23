@@ -77,11 +77,18 @@ public interface DputVisitor<T> extends ParseTreeVisitor<T> {
 	T visitBoolVector(@NotNull DputParser.BoolVectorContext ctx);
 
 	/**
-	 * Visit a parse tree produced by {@link DputParser#vectorStructure}.
+	 * Visit a parse tree produced by {@link DputParser#numberMatrix}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
-	T visitVectorStructure(@NotNull DputParser.VectorStructureContext ctx);
+	T visitNumberMatrix(@NotNull DputParser.NumberMatrixContext ctx);
+
+	/**
+	 * Visit a parse tree produced by {@link DputParser#matrix}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitMatrix(@NotNull DputParser.MatrixContext ctx);
 
 	/**
 	 * Visit a parse tree produced by {@link DputParser#list}.
@@ -126,11 +133,25 @@ public interface DputVisitor<T> extends ParseTreeVisitor<T> {
 	T visitNumber(@NotNull DputParser.NumberContext ctx);
 
 	/**
+	 * Visit a parse tree produced by {@link DputParser#boolMatrix}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitBoolMatrix(@NotNull DputParser.BoolMatrixContext ctx);
+
+	/**
 	 * Visit a parse tree produced by {@link DputParser#vector}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
 	T visitVector(@NotNull DputParser.VectorContext ctx);
+
+	/**
+	 * Visit a parse tree produced by {@link DputParser#stringMatrix}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitStringMatrix(@NotNull DputParser.StringMatrixContext ctx);
 
 	/**
 	 * Visit a parse tree produced by {@link DputParser#strVector}.

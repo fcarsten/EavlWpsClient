@@ -110,15 +110,26 @@ public interface DputListener extends ParseTreeListener {
 	void exitBoolVector(@NotNull DputParser.BoolVectorContext ctx);
 
 	/**
-	 * Enter a parse tree produced by {@link DputParser#vectorStructure}.
+	 * Enter a parse tree produced by {@link DputParser#numberMatrix}.
 	 * @param ctx the parse tree
 	 */
-	void enterVectorStructure(@NotNull DputParser.VectorStructureContext ctx);
+	void enterNumberMatrix(@NotNull DputParser.NumberMatrixContext ctx);
 	/**
-	 * Exit a parse tree produced by {@link DputParser#vectorStructure}.
+	 * Exit a parse tree produced by {@link DputParser#numberMatrix}.
 	 * @param ctx the parse tree
 	 */
-	void exitVectorStructure(@NotNull DputParser.VectorStructureContext ctx);
+	void exitNumberMatrix(@NotNull DputParser.NumberMatrixContext ctx);
+
+	/**
+	 * Enter a parse tree produced by {@link DputParser#matrix}.
+	 * @param ctx the parse tree
+	 */
+	void enterMatrix(@NotNull DputParser.MatrixContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link DputParser#matrix}.
+	 * @param ctx the parse tree
+	 */
+	void exitMatrix(@NotNull DputParser.MatrixContext ctx);
 
 	/**
 	 * Enter a parse tree produced by {@link DputParser#list}.
@@ -187,6 +198,17 @@ public interface DputListener extends ParseTreeListener {
 	void exitNumber(@NotNull DputParser.NumberContext ctx);
 
 	/**
+	 * Enter a parse tree produced by {@link DputParser#boolMatrix}.
+	 * @param ctx the parse tree
+	 */
+	void enterBoolMatrix(@NotNull DputParser.BoolMatrixContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link DputParser#boolMatrix}.
+	 * @param ctx the parse tree
+	 */
+	void exitBoolMatrix(@NotNull DputParser.BoolMatrixContext ctx);
+
+	/**
 	 * Enter a parse tree produced by {@link DputParser#vector}.
 	 * @param ctx the parse tree
 	 */
@@ -196,6 +218,17 @@ public interface DputListener extends ParseTreeListener {
 	 * @param ctx the parse tree
 	 */
 	void exitVector(@NotNull DputParser.VectorContext ctx);
+
+	/**
+	 * Enter a parse tree produced by {@link DputParser#stringMatrix}.
+	 * @param ctx the parse tree
+	 */
+	void enterStringMatrix(@NotNull DputParser.StringMatrixContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link DputParser#stringMatrix}.
+	 * @param ctx the parse tree
+	 */
+	void exitStringMatrix(@NotNull DputParser.StringMatrixContext ctx);
 
 	/**
 	 * Enter a parse tree produced by {@link DputParser#strVector}.

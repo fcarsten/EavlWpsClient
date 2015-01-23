@@ -5,12 +5,26 @@ package org.auscope.eavl.wpsclient.dput;
 }
 
 structure:
-	vectorStructure
+	matrix
 	| listStructure
 	;
 
-vectorStructure:
-	'structure' '(' vector (',' nameValuePair)* ')'
+matrix:
+	boolMatrix
+	| numberMatrix
+	| stringMatrix
+	;
+
+boolMatrix:
+	'structure' '(' boolVector (',' nameValuePair)* ')'
+	;
+
+numberMatrix:
+	'structure' '(' numberVector (',' nameValuePair)* ')'
+	;
+
+stringMatrix:
+	'structure' '(' strVector (',' nameValuePair)* ')'
 	;
 
 listStructure:
@@ -34,7 +48,7 @@ expression:
 	;
 
 variableName:
-	VariableLetter+
+	VariableLetters
 	| QUOTED_VARIABLE_NAME
 	;
 
@@ -82,6 +96,7 @@ unsigned_number
  |  UNSIGNED_FLOAT
  ;
 
+
 VECTOR_START : 'c' WS* '(';
 
 fragment ESCAPED_QUOTE : '\\"';
@@ -91,9 +106,7 @@ QUOTED_STRING :   '"' ( ESCAPED_QUOTE | ~('\n'|'\r') )*? '"';
 fragment ESCAPED_VAR_QUOTE : '\\`';
 QUOTED_VARIABLE_NAME :   '`' ( ESCAPED_VAR_QUOTE | ~('\n'|'\r') )*? '`';
 
-UNSIGNED_INT : DIGIT+ Explicit_int? ;
-
-DIGIT : [0-9];
+UNSIGNED_INT : [0-9]+ Explicit_int? ;
 
 UNSIGNED_FLOAT
  :   ('0'..'9')+ '.' ('0'..'9')* Exponent?
@@ -101,12 +114,12 @@ UNSIGNED_FLOAT
  |   ('0'..'9')+ Exponent
  ;
 
-WS: [ \n\t\r]+ -> skip;
-
 fragment Explicit_int : 'L';
 
 fragment
 Exponent : ('e'|'E') ('+'|'-')? ('0'..'9')+ ;
 
-VariableLetter: [a-zA-Z0-9_.];
+VariableLetters: [0-9a-zA-Z_.]+;
+
+WS: [ \n\t\r]+ -> skip;
 

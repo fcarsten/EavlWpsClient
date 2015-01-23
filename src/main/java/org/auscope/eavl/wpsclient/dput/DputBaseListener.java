@@ -136,13 +136,26 @@ public class DputBaseListener implements DputListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterVectorStructure(@NotNull DputParser.VectorStructureContext ctx) { }
+	@Override public void enterNumberMatrix(@NotNull DputParser.NumberMatrixContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitVectorStructure(@NotNull DputParser.VectorStructureContext ctx) { }
+	@Override public void exitNumberMatrix(@NotNull DputParser.NumberMatrixContext ctx) { }
+
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterMatrix(@NotNull DputParser.MatrixContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitMatrix(@NotNull DputParser.MatrixContext ctx) { }
 
 	/**
 	 * {@inheritDoc}
@@ -227,6 +240,19 @@ public class DputBaseListener implements DputListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
+	@Override public void enterBoolMatrix(@NotNull DputParser.BoolMatrixContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitBoolMatrix(@NotNull DputParser.BoolMatrixContext ctx) { }
+
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
 	@Override public void enterVector(@NotNull DputParser.VectorContext ctx) { }
 	/**
 	 * {@inheritDoc}
@@ -234,6 +260,19 @@ public class DputBaseListener implements DputListener {
 	 * <p>The default implementation does nothing.</p>
 	 */
 	@Override public void exitVector(@NotNull DputParser.VectorContext ctx) { }
+
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterStringMatrix(@NotNull DputParser.StringMatrixContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitStringMatrix(@NotNull DputParser.StringMatrixContext ctx) { }
 
 	/**
 	 * {@inheritDoc}
