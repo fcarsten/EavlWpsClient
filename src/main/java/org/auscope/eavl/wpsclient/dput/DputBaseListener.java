@@ -1,6 +1,6 @@
 // Generated from Dput.g4 by ANTLR 4.3
 
-    package org.auscope.eavl.wpsclient.dput;
+package org.auscope.eavl.wpsclient.dput;
 
 
 import org.antlr.v4.runtime.ParserRuleContext;
@@ -39,6 +39,19 @@ public class DputBaseListener implements DputListener {
 	 * <p>The default implementation does nothing.</p>
 	 */
 	@Override public void exitNumberVector(@NotNull DputParser.NumberVectorContext ctx) { }
+
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterListStructure(@NotNull DputParser.ListStructureContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitListStructure(@NotNull DputParser.ListStructureContext ctx) { }
 
 	/**
 	 * {@inheritDoc}
@@ -123,6 +136,19 @@ public class DputBaseListener implements DputListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
+	@Override public void enterVectorStructure(@NotNull DputParser.VectorStructureContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitVectorStructure(@NotNull DputParser.VectorStructureContext ctx) { }
+
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
 	@Override public void enterList(@NotNull DputParser.ListContext ctx) { }
 	/**
 	 * {@inheritDoc}
@@ -195,19 +221,6 @@ public class DputBaseListener implements DputListener {
 	 * <p>The default implementation does nothing.</p>
 	 */
 	@Override public void exitNumber(@NotNull DputParser.NumberContext ctx) { }
-
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void enterExpressionList(@NotNull DputParser.ExpressionListContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void exitExpressionList(@NotNull DputParser.ExpressionListContext ctx) { }
 
 	/**
 	 * {@inheritDoc}

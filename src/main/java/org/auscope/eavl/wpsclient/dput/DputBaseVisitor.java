@@ -1,6 +1,6 @@
 // Generated from Dput.g4 by ANTLR 4.3
 
-    package org.auscope.eavl.wpsclient.dput;
+package org.auscope.eavl.wpsclient.dput;
 
 import org.antlr.v4.runtime.misc.NotNull;
 import org.antlr.v4.runtime.tree.AbstractParseTreeVisitor;
@@ -29,6 +29,14 @@ public class DputBaseVisitor<T> extends AbstractParseTreeVisitor<T> implements D
 	 * {@link #visitChildren} on {@code ctx}.</p>
 	 */
 	@Override public T visitNumberVector(@NotNull DputParser.NumberVectorContext ctx) { return visitChildren(ctx); }
+
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation returns the result of calling
+	 * {@link #visitChildren} on {@code ctx}.</p>
+	 */
+	@Override public T visitListStructure(@NotNull DputParser.ListStructureContext ctx) { return visitChildren(ctx); }
 
 	/**
 	 * {@inheritDoc}
@@ -84,6 +92,14 @@ public class DputBaseVisitor<T> extends AbstractParseTreeVisitor<T> implements D
 	 * <p>The default implementation returns the result of calling
 	 * {@link #visitChildren} on {@code ctx}.</p>
 	 */
+	@Override public T visitVectorStructure(@NotNull DputParser.VectorStructureContext ctx) { return visitChildren(ctx); }
+
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation returns the result of calling
+	 * {@link #visitChildren} on {@code ctx}.</p>
+	 */
 	@Override public T visitList(@NotNull DputParser.ListContext ctx) { return visitChildren(ctx); }
 
 	/**
@@ -125,14 +141,6 @@ public class DputBaseVisitor<T> extends AbstractParseTreeVisitor<T> implements D
 	 * {@link #visitChildren} on {@code ctx}.</p>
 	 */
 	@Override public T visitNumber(@NotNull DputParser.NumberContext ctx) { return visitChildren(ctx); }
-
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation returns the result of calling
-	 * {@link #visitChildren} on {@code ctx}.</p>
-	 */
-	@Override public T visitExpressionList(@NotNull DputParser.ExpressionListContext ctx) { return visitChildren(ctx); }
 
 	/**
 	 * {@inheritDoc}

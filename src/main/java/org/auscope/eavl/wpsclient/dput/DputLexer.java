@@ -1,6 +1,6 @@
 // Generated from Dput.g4 by ANTLR 4.3
 
-    package org.auscope.eavl.wpsclient.dput;
+package org.auscope.eavl.wpsclient.dput;
 
 import org.antlr.v4.runtime.Lexer;
 import org.antlr.v4.runtime.CharStream;

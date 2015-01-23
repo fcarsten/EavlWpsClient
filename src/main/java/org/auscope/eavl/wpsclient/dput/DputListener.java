@@ -1,6 +1,6 @@
 // Generated from Dput.g4 by ANTLR 4.3
 
-    package org.auscope.eavl.wpsclient.dput;
+package org.auscope.eavl.wpsclient.dput;
 
 import org.antlr.v4.runtime.misc.NotNull;
 import org.antlr.v4.runtime.tree.ParseTreeListener;
@@ -31,6 +31,17 @@ public interface DputListener extends ParseTreeListener {
 	 * @param ctx the parse tree
 	 */
 	void exitNumberVector(@NotNull DputParser.NumberVectorContext ctx);
+
+	/**
+	 * Enter a parse tree produced by {@link DputParser#listStructure}.
+	 * @param ctx the parse tree
+	 */
+	void enterListStructure(@NotNull DputParser.ListStructureContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link DputParser#listStructure}.
+	 * @param ctx the parse tree
+	 */
+	void exitListStructure(@NotNull DputParser.ListStructureContext ctx);
 
 	/**
 	 * Enter a parse tree produced by {@link DputParser#expression}.
@@ -99,6 +110,17 @@ public interface DputListener extends ParseTreeListener {
 	void exitBoolVector(@NotNull DputParser.BoolVectorContext ctx);
 
 	/**
+	 * Enter a parse tree produced by {@link DputParser#vectorStructure}.
+	 * @param ctx the parse tree
+	 */
+	void enterVectorStructure(@NotNull DputParser.VectorStructureContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link DputParser#vectorStructure}.
+	 * @param ctx the parse tree
+	 */
+	void exitVectorStructure(@NotNull DputParser.VectorStructureContext ctx);
+
+	/**
 	 * Enter a parse tree produced by {@link DputParser#list}.
 	 * @param ctx the parse tree
 	 */
@@ -163,17 +185,6 @@ public interface DputListener extends ParseTreeListener {
 	 * @param ctx the parse tree
 	 */
 	void exitNumber(@NotNull DputParser.NumberContext ctx);
-
-	/**
-	 * Enter a parse tree produced by {@link DputParser#expressionList}.
-	 * @param ctx the parse tree
-	 */
-	void enterExpressionList(@NotNull DputParser.ExpressionListContext ctx);
-	/**
-	 * Exit a parse tree produced by {@link DputParser#expressionList}.
-	 * @param ctx the parse tree
-	 */
-	void exitExpressionList(@NotNull DputParser.ExpressionListContext ctx);
 
 	/**
 	 * Enter a parse tree produced by {@link DputParser#vector}.

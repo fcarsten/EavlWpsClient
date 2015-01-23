@@ -1,6 +1,6 @@
 // Generated from Dput.g4 by ANTLR 4.3
 
-    package org.auscope.eavl.wpsclient.dput;
+package org.auscope.eavl.wpsclient.dput;
 
 import org.antlr.v4.runtime.misc.NotNull;
 import org.antlr.v4.runtime.tree.ParseTreeVisitor;
@@ -26,6 +26,13 @@ public interface DputVisitor<T> extends ParseTreeVisitor<T> {
 	 * @return the visitor result
 	 */
 	T visitNumberVector(@NotNull DputParser.NumberVectorContext ctx);
+
+	/**
+	 * Visit a parse tree produced by {@link DputParser#listStructure}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitListStructure(@NotNull DputParser.ListStructureContext ctx);
 
 	/**
 	 * Visit a parse tree produced by {@link DputParser#expression}.
@@ -70,6 +77,13 @@ public interface DputVisitor<T> extends ParseTreeVisitor<T> {
 	T visitBoolVector(@NotNull DputParser.BoolVectorContext ctx);
 
 	/**
+	 * Visit a parse tree produced by {@link DputParser#vectorStructure}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitVectorStructure(@NotNull DputParser.VectorStructureContext ctx);
+
+	/**
 	 * Visit a parse tree produced by {@link DputParser#list}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
@@ -110,13 +124,6 @@ public interface DputVisitor<T> extends ParseTreeVisitor<T> {
 	 * @return the visitor result
 	 */
 	T visitNumber(@NotNull DputParser.NumberContext ctx);
-
-	/**
-	 * Visit a parse tree produced by {@link DputParser#expressionList}.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	T visitExpressionList(@NotNull DputParser.ExpressionListContext ctx);
 
 	/**
 	 * Visit a parse tree produced by {@link DputParser#vector}.

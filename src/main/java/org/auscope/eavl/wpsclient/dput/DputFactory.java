@@ -12,7 +12,7 @@ import org.antlr.v4.runtime.CommonTokenStream;
 import org.antlr.v4.runtime.RecognitionException;
 import org.antlr.v4.runtime.Recognizer;
 import org.antlr.v4.runtime.atn.PredictionMode;
-import org.auscope.eavl.wpsclient.dput.DputParser.ExpressionListContext;
+import org.auscope.eavl.wpsclient.dput.DputParser.StructureContext;
 
 /**
  * @author fri096
@@ -29,7 +29,7 @@ public class DputFactory  {
 
         parser.getInterpreter().setPredictionMode(PredictionMode.SLL);
         try {
-            ExpressionListContext res = parser.expressionList();  // STAGE 1
+            StructureContext res = parser.structure();  // STAGE 1
             Dput ret = new DputParserVisitor().visit(res);
             return ret;
        }
@@ -46,7 +46,7 @@ public class DputFactory  {
             tokens.reset(); // rewind input stream
             parser.reset();
             parser.getInterpreter().setPredictionMode(PredictionMode.LL);
-            ExpressionListContext res = parser.expressionList();  // STAGE 2
+            StructureContext res = parser.structure();  // STAGE 1
             Dput ret = new DputParserVisitor().visit(res);
             return ret;
             // if we parse ok, it's LL not SLL

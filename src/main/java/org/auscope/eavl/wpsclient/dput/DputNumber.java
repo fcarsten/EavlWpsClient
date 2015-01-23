@@ -7,14 +7,14 @@ package org.auscope.eavl.wpsclient.dput;
  * @author fri096
  *
  */
-public class DputNumber implements Dput {
+public class DputNumber implements Dput, DputConstant {
 
     private double value;
 
     /**
      * @return the value
      */
-    public double getValue() {
+    public Double getValue() {
         return value;
     }
 
@@ -28,7 +28,7 @@ public class DputNumber implements Dput {
      */
     @Override
     public String toString() {
-        return ""+ value;
+        return "Numbers: "+  value;
     }
 
 }

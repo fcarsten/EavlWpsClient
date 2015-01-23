@@ -1,22 +1,20 @@
 grammar Dput;
 
 @header {
-    package org.auscope.eavl.wpsclient.dput;
+package org.auscope.eavl.wpsclient.dput;
 }
 
-expressionList:
-	expression (',' expression)*
-	;
-
-expression:
-	nameValuePair
-	| structure
-	| list
-	| vector
-	;
-
 structure:
-	'structure' '(' expressionList ')'
+	vectorStructure
+	| listStructure
+	;
+
+vectorStructure:
+	'structure' '(' vector (',' nameValuePair)* ')'
+	;
+
+listStructure:
+	'structure' '(' list (',' nameValuePair)* ')'
 	;
 
 list:
@@ -26,6 +24,13 @@ list:
 nameValuePair:
 	WS* name=variableName WS* '=' WS* (expression | constant)
 	| 'NULL'
+	;
+
+expression:
+	nameValuePair
+	| structure
+	| list
+	| vector
 	;
 
 variableName:

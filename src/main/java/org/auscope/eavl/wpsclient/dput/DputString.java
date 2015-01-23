@@ -7,7 +7,7 @@ package org.auscope.eavl.wpsclient.dput;
  * @author fri096
  *
  */
-public class DputString implements Dput {
+public class DputString implements Dput, DputConstant {
 
     private String value;
 

@@ -10,29 +10,20 @@ import java.util.Arrays;
  * @author fri096
  *
  */
-public class DputDoubleVector implements Dput {
+public class DputDoubleVector implements DputVector {
 
-    private double[] val;
+    private Double[] val= {};
 
     /**
      * @return the val
      */
-    public double[] getVal() {
+    @Override
+    public Double[] getValues() {
         return val;
     }
 
-    /**
-     * @param val the val to set
-     */
-    public void setVal(double[] val) {
-        this.val = val;
-    }
-
     public DputDoubleVector(ArrayList<Double> res) {
-        val = new double[res.size()];
-        for (int i = 0; i < val.length; i++) {
-            val[i]=res.get(i);
-        }
+        val= res.toArray(val);
     }
 
     /* (non-Javadoc)
@@ -40,7 +31,7 @@ public class DputDoubleVector implements Dput {
      */
     @Override
     public String toString() {
-        return  Arrays.toString(val) ;
+        return  "Doubles: "+Arrays.toString(val) ;
     }
 
 }

@@ -10,22 +10,23 @@ import java.util.Arrays;
  * @author fri096
  *
  */
-public class DputStringVector implements Dput {
+public class DputStringVector implements DputVector {
 
-    private String[] value;
+    private String[] value= {};
 
     /* (non-Javadoc)
      * @see java.lang.Object#toString()
      */
     @Override
     public String toString() {
-        return Arrays.toString(value);
+        return "Strings: "+ Arrays.toString(value);
     }
 
     /**
      * @return the value
      */
-    public String[] getValue() {
+    @Override
+    public String[] getValues() {
         return value;
     }
 

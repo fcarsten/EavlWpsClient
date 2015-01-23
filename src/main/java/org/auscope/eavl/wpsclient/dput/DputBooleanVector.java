@@ -10,22 +10,20 @@ import java.util.Arrays;
  * @author fri096
  *
  */
-public class DputBooleanVector implements Dput {
+public class DputBooleanVector implements DputVector {
 
-    private boolean[] val;
+    private Boolean[] val= {};
 
     /**
      * @return the val
      */
-    public boolean[] getVal() {
+    @Override
+    public Boolean[] getValues() {
         return val;
     }
 
     public DputBooleanVector(ArrayList<Boolean> res) {
-        val = new boolean[res.size()];
-        for (int i = 0; i < val.length; i++) {
-            val[i]=res.get(i);
-        }
+        val= res.toArray(val);
     }
 
     /* (non-Javadoc)

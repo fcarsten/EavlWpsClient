@@ -7,14 +7,14 @@ package org.auscope.eavl.wpsclient.dput;
  * @author fri096
  *
  */
-public class DputBool implements Dput {
+public class DputBool implements Dput, DputConstant {
 
     private boolean value;
 
     /**
      * @return the value
      */
-    public boolean isValue() {
+    public Boolean getValue() {
         return value;
     }
 
