@@ -21,8 +21,8 @@ public class HpiKde implements Serializable {
     }
 
     public Double[] getEstimate() {
-        DputNumberMatrix estimateDput = (DputNumberMatrix) hpiKde
-                .getAttribute("estimate");
+        DputListStructure gkde =  (DputListStructure) hpiKde.getAttribute("gkde");
+        DputNumberMatrix estimateDput = (DputNumberMatrix) gkde.getAttribute("estimate");
         Double[][] a = estimateDput.getValues();
         return a[0];
     }
