@@ -10,7 +10,6 @@ import org.apache.log4j.ConsoleAppender;
 import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
 import org.apache.log4j.PatternLayout;
-import org.auscope.eavl.wpsclient.dput.Dput;
 import org.n52.wps.client.WPSClientException;
 
 /**
@@ -51,7 +50,7 @@ public class AppTest extends TestCase {
 
     public static ConditionalProbabilityWpsClient getClient() {
         return new ConditionalProbabilityWpsClient(
-                "http://115.146.94.28:8080/wps/WebProcessingService");
+                "http://130.56.250.253:8080/wps/WebProcessingService");
     }
 
     public static void print2DArray(double[][] array) {
