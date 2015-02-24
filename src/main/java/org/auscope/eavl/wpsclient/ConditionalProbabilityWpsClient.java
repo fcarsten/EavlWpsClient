@@ -538,13 +538,6 @@ public class ConditionalProbabilityWpsClient extends EavlWpsClient {
         HashMap<String, Object> parameters = new HashMap<String, Object>();
         parameters.put("nGclr3Cols", "" + nGclr3Cols);
         parameters.put("gclr3Str", gclr3Str);
-        FileWriter f = new FileWriter("gclr3Str.txt");
-        f.write(gclr3Str);
-        f.close();
-        f = new FileWriter("eps.txt");
-        f.write(evalptsStr);
-        f.close();
-
         parameters.put("nEvalptsCols", "" + nEvalptsCols);
         parameters.put("eps", evalptsStr);
 
