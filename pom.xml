@@ -42,7 +42,7 @@
                     <compilerVersion>1.7</compilerVersion>
                 </configuration>
             </plugin>
-        </plugins>    
+        </plugins>
     </build>
 
     <dependencies>
@@ -91,7 +91,6 @@
                     <artifactId>jmxri</artifactId>
                 </exclusion>
             </exclusions>
-            <scope>runtime</scope>
         </dependency>
         <dependency>
             <groupId>junit</groupId>
@@ -99,7 +98,7 @@
             <version>3.8.1</version>
             <scope>test</scope>
         </dependency>
-        <dependency> 
+        <dependency>
             <groupId>org.antlr</groupId>
             <artifactId>antlr4-runtime</artifactId>
             <version>4.3</version>
