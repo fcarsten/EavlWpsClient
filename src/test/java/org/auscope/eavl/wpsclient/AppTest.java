@@ -50,7 +50,7 @@ public class AppTest extends TestCase {
 
     public static ConditionalProbabilityWpsClient getClient() {
         return new ConditionalProbabilityWpsClient(
-                "http://130.56.250.253:8080/wps/WebProcessingService");
+                "http://130.56.248.192:8080/wps/WebProcessingService");
     }
 
     public static void print2DArray(double[][] array) {
