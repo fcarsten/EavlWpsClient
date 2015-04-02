@@ -3,7 +3,7 @@
  */
 package org.auscope.eavl.wpsclient;
 
-import java.io.FileNotFoundException;
+import java.io.IOException;
 
 import org.n52.wps.client.WPSClientException;
 import org.slf4j.Logger;
@@ -51,7 +51,7 @@ public class WpsAsyncResultImpl<T> implements WpsAsyncResult<T> {
 		this.asyncResultRetriever = asyncResultRetriever;
 	}
 
-	public T get() throws FileNotFoundException, WPSClientException {
+	public T get() throws IOException, WPSClientException {
 		return asyncResultRetriever.retrieve(analyser);
 	}
 

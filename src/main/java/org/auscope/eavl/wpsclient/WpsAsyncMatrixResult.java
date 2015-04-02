@@ -3,7 +3,7 @@
  */
 package org.auscope.eavl.wpsclient;
 
-import java.io.FileNotFoundException;
+import java.io.IOException;
 
 import org.n52.wps.client.WPSClientException;
 
@@ -16,7 +16,7 @@ public class WpsAsyncMatrixResult extends WpsAsyncResultImpl<double[][]> {
 	public WpsAsyncMatrixResult(AsyncExecuteResponseAnalyser analyser,
 			String string) {
 		super(analyser, new AsyncResultRetriever<double[][]>() {
-			public double[][] retrieve(AsyncExecuteResponseAnalyser analyser) throws FileNotFoundException,
+			public double[][] retrieve(AsyncExecuteResponseAnalyser analyser) throws IOException,
 					WPSClientException {
 				return WpsUtils.getMatrixResult(analyser.get(), "output");
 			}

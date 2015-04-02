@@ -5,7 +5,7 @@ package org.auscope.eavl.wpsclient;
 
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
+import java.io.IOException;
 
 import javax.xml.xpath.XPath;
 import javax.xml.xpath.XPathExpression;
@@ -28,7 +28,7 @@ public class WpsUtils {
 
 	public static double[] getVectorResult(ExecuteResponseAnalyser analyser,
 			String outputParameterName) throws WPSClientException,
-			FileNotFoundException {
+			IOException {
 		String resultStr = WpsUtils.getResultString(analyser, outputParameterName);
 		return parseWpsVectorOutput(resultStr);
 	}
@@ -56,11 +56,11 @@ public class WpsUtils {
 	 * @param outputParameterName
 	 * @return
 	 * @throws WPSClientException
-	 * @throws FileNotFoundException
+	 * @throws IOException
 	 */
 	public static String getResultString(ExecuteResponseAnalyser analyser,
 			String outputParameterName) throws WPSClientException,
-			FileNotFoundException {
+			IOException {
 		GenericFileDataBinding data = (GenericFileDataBinding) analyser
 				.getComplexData(outputParameterName,
 						GenericFileDataBinding.class);
@@ -73,9 +73,12 @@ public class WpsUtils {
 			XPathExpression expression = xpath.compile("/xml-fragment");
 			return expression.evaluate(new org.xml.sax.InputSource(
 					new FileInputStream(f)));
-		} catch (XPathExpressionException e) {
-			throw new WPSClientException("Error parsing result: "
-					+ e.getMessage(), e);
+        } catch (XPathExpressionException e) {
+            if(e.getCause() instanceof org.xml.sax.SAXParseException) {
+                throw new IOException(e.getCause().getMessage(), e.getCause());
+            }
+            throw new WPSClientException("Error parsing result: "
+                    + e.getMessage(), e);
 		} finally {
 			if (!f.delete()) {
 				logger.warn("Could not delete temporary result file: " + f);
@@ -84,14 +87,14 @@ public class WpsUtils {
 	}
 	public static double[][] getMatrixResult(ExecuteResponseAnalyser analyser,
 			String outputParameterName) throws WPSClientException,
-			FileNotFoundException {
+			IOException {
 		String resultStr = WpsUtils.getResultString(analyser, outputParameterName);
 		return parseWpsMatrixOutput(resultStr);
 	}
 
     public static Double[][] getMatrixResultDouble(ExecuteResponseAnalyser analyser,
             String outputParameterName) throws WPSClientException,
-            FileNotFoundException {
+            IOException {
         String resultStr = WpsUtils.getResultString(analyser, outputParameterName);
         return parseWpsMatrixOutputDouble(resultStr);
     }

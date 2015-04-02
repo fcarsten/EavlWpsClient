@@ -232,7 +232,7 @@ public class ConditionalProbabilityWpsClient extends EavlWpsClient {
                 new AsyncResultRetriever<ACF>() {
 
                     public ACF retrieve(AsyncExecuteResponseAnalyser analyser)
-                            throws FileNotFoundException, WPSClientException {
+                            throws IOException, WPSClientException {
                         double[][] res = WpsUtils.getMatrixResult(
                                 analyser.get(), "output");
                         double ci = Double.NaN;

@@ -4,6 +4,7 @@
 package org.auscope.eavl.wpsclient;
 
 import java.io.FileNotFoundException;
+import java.io.IOException;
 
 import org.n52.wps.client.WPSClientException;
 
@@ -17,8 +18,9 @@ public interface WpsAsyncResult<T> {
 	 * @return
 	 * @throws FileNotFoundException
 	 * @throws WPSClientException
+	 * @throws IOException
 	 */
-	public T get() throws FileNotFoundException, WPSClientException;
+	public T get() throws WPSClientException, IOException;
 
 	/**
 	 * Returns percentage complete as reported by WPS server at the last execution of updateStatus.
