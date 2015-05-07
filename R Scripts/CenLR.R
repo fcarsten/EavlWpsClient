@@ -24,7 +24,7 @@ data=data.frame(matrix(t(dataVector), ncol=nCols, byrow=TRUE))
 # xyz=compdata[,66:68] # the columns containing geographic location i.e. (x,y,z)
 #IF USING GUI SELECTION I WILL REWRITE imputationNA() METHOD
 compdataImp=cenLR(data)
-(data) #THIS IS A SLOW STEP
+#(data) #THIS IS A SLOW STEP
 #compdataImp=compdata 
 
 output = "cenlrout"
