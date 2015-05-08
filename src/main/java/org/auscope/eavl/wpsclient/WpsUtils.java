@@ -6,6 +6,7 @@ package org.auscope.eavl.wpsclient;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.nio.file.Files;
 
 import javax.xml.xpath.XPath;
 import javax.xml.xpath.XPathExpression;
@@ -74,6 +75,10 @@ public class WpsUtils {
 			return expression.evaluate(new org.xml.sax.InputSource(
 					new FileInputStream(f)));
         } catch (XPathExpressionException e) {
+            if(e.getMessage().contains("Content is not allowed in prolog")) {
+                // Assume newer version which does not package in <xml-fragment>
+                return new String(Files.readAllBytes(f.toPath()), "UTF-8");
+            }
             if(e.getCause() instanceof org.xml.sax.SAXParseException) {
                 throw new IOException(e.getCause().getMessage(), e.getCause());
             }
