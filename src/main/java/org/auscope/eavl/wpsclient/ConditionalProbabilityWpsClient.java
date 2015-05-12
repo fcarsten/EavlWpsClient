@@ -3,19 +3,12 @@
  */
 package org.auscope.eavl.wpsclient;
 
-import java.io.BufferedWriter;
 import java.io.ByteArrayInputStream;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.FileWriter;
 import java.io.IOException;
-import java.io.OutputStreamWriter;
-import java.io.Writer;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-import org.auscope.eavl.wpsclient.dput.Dput;
 import org.auscope.eavl.wpsclient.dput.DputFactory;
 import org.auscope.eavl.wpsclient.dput.DputListStructure;
 import org.n52.wps.client.ExecuteResponseAnalyser;
