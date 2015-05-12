@@ -60,7 +60,7 @@
         <dependency>
             <groupId>org.n52.wps</groupId>
             <artifactId>52n-wps-client-lib</artifactId>
-            <version>3.3.1-SNAPSHOT</version>
+            <version>3.3.1</version>
             <exclusions>
                 <exclusion>
                     <artifactId>guava</artifactId>
